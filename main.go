@@ -1,12 +1,25 @@
 package main
 
 import (
+    "encoding/json"
 	"log"
 	"net/http"
 	"os"
-
+	"time"
+    "github.com/auth0/go-jwt-middleware"
+    "github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+    "github.com/googollee/go-socket.io"
+    "github.com/jinzhu/gorm"
+    _ "github.com/jinzhu/gorm/dialects/postgres"
 )
+
+func doEvery(d time.Duration, f func(time.Time)) {
+	for x := range time.Tick(d) {
+		f(x)
+	}
+}
+
 
 func main() {
 	port := os.Getenv("PORT")
@@ -15,14 +28,33 @@ func main() {
 		log.Fatal("$PORT must be set")
 	}
 
-	router := gin.New()
-	router.Use(gin.Logger())
-	router.LoadHTMLGlob("templates/*.tmpl.html")
-	router.Static("/static", "static")
+	server, err := socketio.NewServer(nil)
+    if err != nil {
+        log.Fatal(err)
+    }
 
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl.html", nil)
-	})
+	server.On("connection", func(so socketio.Socket) {
+        log.Println("on connection")
+        doEvery(20*time.Millisecond, so.Emit("time", time.Now().Format(time.RFC850)))
+        so.On("disconnection", func() {
+            log.Println("on disconnect")
+        })
+    })
 
-	router.Run(":" + port)
+    server.On("error", func(so socketio.Socket, err error) {
+        log.Println("error:", err)
+    })
+
+    http.Handle("/socket.io/", server)
+    http.Handle("/", http.FileServer(http.Dir("./asset")))
+    log.Println("Serving at localhost:5000...")
+    log.Fatal(http.ListenAndServe(":5000", nil))
+
+    db, err := gorm.Open("postgres", "host=myhost user=gorm dbname=gorm sslmode=disable password=mypassword")
+  
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	defer db.Close()
 }
