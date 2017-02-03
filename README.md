@@ -1,9 +1,5 @@
 
-# go-getting-started
-
-A barebones Go app, which can easily be deployed to Heroku.
-
-This application supports the [Getting Started with Go on Heroku](https://devcenter.heroku.com/articles/getting-started-with-go) article - check it out.
+# Tendresse
 
 ## Running Locally
 
@@ -17,7 +13,7 @@ $ heroku local
 
 Your app should now be running on [localhost:5000](http://localhost:5000/).
 
-You should also install [Godep](https://github.com/tools/godep) if you are going to add any dependencies to the sample app.
+govendor
 
 ## Deploying to Heroku
 
@@ -27,13 +23,3 @@ $ git push heroku master
 $ heroku open
 ```
 
-or
-
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
-
-
-## Documentation
-
-For more information about using Go on Heroku, see these Dev Center articles:
-
-- [Go on Heroku](https://devcenter.heroku.com/categories/go)
