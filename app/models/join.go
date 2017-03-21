@@ -4,6 +4,7 @@ import (
 	// "encoding/json"
 	_"gopkg.in/pg.v5"
 )
+
 type GifsTags struct {
 	TagID		int
 	GifID		int

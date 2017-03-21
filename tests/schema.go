@@ -4,7 +4,7 @@ var create_schema = []string{
 	`CREATE TABLE tags (
 		id 		SERIAL 	CONSTRAINT pk_tag PRIMARY KEY,
 		banned		boolean,
-		name		text
+		title		text
 	);`,
 	`CREATE TABLE achievements (
 		id 		SERIAL 	CONSTRAINT pk_achievement PRIMARY KEY,
@@ -17,7 +17,7 @@ var create_schema = []string{
 	);`,
 	`CREATE TABLE blogs (
 		id 		SERIAL 	CONSTRAINT pk_blog PRIMARY KEY,
-		name        	text,
+		title        	text,
 		url       	text
 	);`,
 	`CREATE TABLE gifs (
@@ -28,7 +28,7 @@ var create_schema = []string{
 	);`,
 	`CREATE TABLE roles (
 		id 		SERIAL 	CONSTRAINT pk_role PRIMARY KEY,
-		name		text
+		title		text
 	);
 	`,
 	`CREATE TABLE users (

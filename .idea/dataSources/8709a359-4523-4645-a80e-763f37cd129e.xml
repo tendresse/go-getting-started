@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="postgres@localhost">
+  <database-model serializer="dbm" rdbms="POSTGRES" format-version="4.0">
+    <root id="1"/>
+    <database id="2" parent="1" name="postgres">
+      <ObjectId>12407</ObjectId>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </database>
+    <schema id="3" parent="2" name="public">
+      <ObjectId>22881</ObjectId>
+      <IntrospectionTimestamp>2017-03-16.16:23:05.789</IntrospectionTimestamp>
+      <IntrospectionStateNumber>1711</IntrospectionStateNumber>
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="4" parent="2" name="pg_catalog">
+      <ObjectId>11</ObjectId>
+    </schema>
+    <schema id="5" parent="2" name="pg_toast">
+      <ObjectId>99</ObjectId>
+    </schema>
+    <schema id="6" parent="2" name="pg_temp_1">
+      <ObjectId>11848</ObjectId>
+    </schema>
+    <schema id="7" parent="2" name="pg_toast_temp_1">
+      <ObjectId>11849</ObjectId>
+    </schema>
+    <schema id="8" parent="2" name="information_schema">
+      <ObjectId>12119</ObjectId>
+    </schema>
+    <sequence id="9" parent="3" name="achievements_id_seq">
+      <ObjectId>22893</ObjectId>
+      <StateNumber>1702</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+    </sequence>
+    <sequence id="10" parent="3" name="blogs_id_seq">
+      <ObjectId>22909</ObjectId>
+      <StateNumber>1703</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+    </sequence>
+    <sequence id="11" parent="3" name="gifs_id_seq">
+      <ObjectId>22920</ObjectId>
+      <StateNumber>1704</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+    </sequence>
+    <sequence id="12" parent="3" name="roles_id_seq">
+      <ObjectId>22936</ObjectId>
+      <StateNumber>1705</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+    </sequence>
+    <sequence id="13" parent="3" name="tags_id_seq">
+      <ObjectId>22882</ObjectId>
+      <StateNumber>1701</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+    </sequence>
+    <sequence id="14" parent="3" name="tendresses_id_seq">
+      <ObjectId>22960</ObjectId>
+      <StateNumber>1707</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+    </sequence>
+    <sequence id="15" parent="3" name="users_id_seq">
+      <ObjectId>22947</ObjectId>
+      <StateNumber>1706</StateNumber>
+      <SequenceIdentity>1</SequenceIdentity>
+    </sequence>
+    <table id="16" parent="3" name="achievements">
+      <ObjectId>22895</ObjectId>
+      <StateNumber>1709</StateNumber>
+    </table>
+    <table id="17" parent="3" name="blogs">
+      <ObjectId>22911</ObjectId>
+      <StateNumber>1704</StateNumber>
+    </table>
+    <table id="18" parent="3" name="gifs">
+      <ObjectId>22922</ObjectId>
+      <StateNumber>1708</StateNumber>
+    </table>
+    <table id="19" parent="3" name="gifs_tags">
+      <ObjectId>22984</ObjectId>
+      <StateNumber>1708</StateNumber>
+    </table>
+    <table id="20" parent="3" name="roles">
+      <ObjectId>22938</ObjectId>
+      <StateNumber>1711</StateNumber>
+    </table>
+    <table id="21" parent="3" name="tags">
+      <ObjectId>22884</ObjectId>
+      <StateNumber>1708</StateNumber>
+    </table>
+    <table id="22" parent="3" name="tendresses">
+      <ObjectId>22962</ObjectId>
+      <StateNumber>1707</StateNumber>
+    </table>
+    <table id="23" parent="3" name="users">
+      <ObjectId>22949</ObjectId>
+      <StateNumber>1711</StateNumber>
+    </table>
+    <table id="24" parent="3" name="users_achievements">
+      <ObjectId>22999</ObjectId>
+      <StateNumber>1709</StateNumber>
+    </table>
+    <table id="25" parent="3" name="users_friends">
+      <ObjectId>23014</ObjectId>
+      <StateNumber>1710</StateNumber>
+    </table>
+    <table id="26" parent="3" name="users_roles">
+      <ObjectId>23029</ObjectId>
+      <StateNumber>1711</StateNumber>
+    </table>
+    <column id="27" parent="16" name="id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1702</StateNumber>
+      <DefaultExpression>nextval(&apos;achievements_id_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="28" parent="16" name="condition">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>1702</StateNumber>
+    </column>
+    <column id="29" parent="16" name="icon">
+      <Position>3</Position>
+      <DataType>text|0</DataType>
+      <StateNumber>1702</StateNumber>
+    </column>
+    <column id="30" parent="16" name="tag_id">
+      <Position>4</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>1702</StateNumber>
+    </column>
+    <column id="31" parent="16" name="title">
+      <Position>5</Position>
+      <DataType>text|0</DataType>
+      <StateNumber>1702</StateNumber>
+    </column>
+    <column id="32" parent="16" name="type_of">
+      <Position>6</Position>
+      <DataType>text|0</DataType>
+      <StateNumber>1702</StateNumber>
+    </column>
+    <column id="33" parent="16" name="xp">
+      <Position>7</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>1702</StateNumber>
+    </column>
+    <index id="34" parent="16" name="pk_achievement">
+      <ObjectId>22902</ObjectId>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="35" parent="16" name="pk_achievement">
+      <ObjectId>22903</ObjectId>
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>pk_achievement</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="36" parent="16" name="achievements_tag_id_fkey">
+      <ObjectId>22904</ObjectId>
+      <ColNames>tag_id</ColNames>
+      <RefTableName>tags</RefTableName>
+      <RefKeyName>pk_tag</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="37" parent="17" name="id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1703</StateNumber>
+      <DefaultExpression>nextval(&apos;blogs_id_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="38" parent="17" name="name">
+      <Position>2</Position>
+      <DataType>text|0</DataType>
+      <StateNumber>1703</StateNumber>
+    </column>
+    <column id="39" parent="17" name="url">
+      <Position>3</Position>
+      <DataType>text|0</DataType>
+      <StateNumber>1703</StateNumber>
+    </column>
+    <index id="40" parent="17" name="pk_blog">
+      <ObjectId>22918</ObjectId>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="41" parent="17" name="pk_blog">
+      <ObjectId>22919</ObjectId>
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>pk_blog</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="42" parent="18" name="id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1704</StateNumber>
+      <DefaultExpression>nextval(&apos;gifs_id_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="43" parent="18" name="blog_id">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>1704</StateNumber>
+    </column>
+    <column id="44" parent="18" name="url">
+      <Position>3</Position>
+      <DataType>text|0</DataType>
+      <StateNumber>1704</StateNumber>
+    </column>
+    <column id="45" parent="18" name="lame_score">
+      <Position>4</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>1704</StateNumber>
+    </column>
+    <index id="46" parent="18" name="pk_gif">
+      <ObjectId>22929</ObjectId>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="47" parent="18" name="pk_gif">
+      <ObjectId>22930</ObjectId>
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>pk_gif</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="48" parent="18" name="gifs_blog_id_fkey">
+      <ObjectId>22931</ObjectId>
+      <ColNames>blog_id</ColNames>
+      <RefTableName>blogs</RefTableName>
+      <RefKeyName>pk_blog</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="49" parent="19" name="tag_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1708</StateNumber>
+    </column>
+    <column id="50" parent="19" name="gif_id">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1708</StateNumber>
+    </column>
+    <index id="51" parent="19" name="pk_gif_tags">
+      <ObjectId>22987</ObjectId>
+      <ColNames>tag_id
+gif_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="52" parent="19" name="pk_gif_tags">
+      <ObjectId>22988</ObjectId>
+      <ColNames>tag_id
+gif_id</ColNames>
+      <UnderlyingIndexName>pk_gif_tags</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="53" parent="19" name="gifs_tags_tag_id_fkey">
+      <ObjectId>22989</ObjectId>
+      <ColNames>tag_id</ColNames>
+      <RefTableName>tags</RefTableName>
+      <RefKeyName>pk_tag</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="54" parent="19" name="gifs_tags_gif_id_fkey">
+      <ObjectId>22994</ObjectId>
+      <ColNames>gif_id</ColNames>
+      <RefTableName>gifs</RefTableName>
+      <RefKeyName>pk_gif</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="55" parent="20" name="id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1705</StateNumber>
+      <DefaultExpression>nextval(&apos;roles_id_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="56" parent="20" name="name">
+      <Position>2</Position>
+      <DataType>text|0</DataType>
+      <StateNumber>1705</StateNumber>
+    </column>
+    <index id="57" parent="20" name="pk_role">
+      <ObjectId>22945</ObjectId>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="58" parent="20" name="pk_role">
+      <ObjectId>22946</ObjectId>
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>pk_role</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="59" parent="21" name="id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1701</StateNumber>
+      <DefaultExpression>nextval(&apos;tags_id_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="60" parent="21" name="banned">
+      <Position>2</Position>
+      <DataType>boolean|0</DataType>
+      <StateNumber>1701</StateNumber>
+    </column>
+    <column id="61" parent="21" name="name">
+      <Position>3</Position>
+      <DataType>text|0</DataType>
+      <StateNumber>1701</StateNumber>
+    </column>
+    <index id="62" parent="21" name="pk_tag">
+      <ObjectId>22891</ObjectId>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="63" parent="21" name="pk_tag">
+      <ObjectId>22892</ObjectId>
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>pk_tag</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="64" parent="22" name="id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1707</StateNumber>
+      <DefaultExpression>nextval(&apos;tendresses_id_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="65" parent="22" name="sender_id">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>1707</StateNumber>
+    </column>
+    <column id="66" parent="22" name="receiver_id">
+      <Position>3</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>1707</StateNumber>
+    </column>
+    <column id="67" parent="22" name="gif_id">
+      <Position>4</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>1707</StateNumber>
+    </column>
+    <column id="68" parent="22" name="viewed">
+      <Position>5</Position>
+      <DataType>boolean|0</DataType>
+      <StateNumber>1707</StateNumber>
+      <DefaultExpression>false</DefaultExpression>
+    </column>
+    <index id="69" parent="22" name="pk_tendresse">
+      <ObjectId>22967</ObjectId>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="70" parent="22" name="pk_tendresse">
+      <ObjectId>22968</ObjectId>
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>pk_tendresse</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="71" parent="22" name="tendresses_sender_id_fkey">
+      <ObjectId>22969</ObjectId>
+      <ColNames>sender_id</ColNames>
+      <RefTableName>users</RefTableName>
+      <RefKeyName>pk_user</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="72" parent="22" name="tendresses_receiver_id_fkey">
+      <ObjectId>22974</ObjectId>
+      <ColNames>receiver_id</ColNames>
+      <RefTableName>users</RefTableName>
+      <RefKeyName>pk_user</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="73" parent="22" name="tendresses_gif_id_fkey">
+      <ObjectId>22979</ObjectId>
+      <ColNames>gif_id</ColNames>
+      <RefTableName>gifs</RefTableName>
+      <RefKeyName>pk_gif</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="74" parent="23" name="id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1706</StateNumber>
+      <DefaultExpression>nextval(&apos;users_id_seq&apos;::regclass)</DefaultExpression>
+    </column>
+    <column id="75" parent="23" name="device">
+      <Position>2</Position>
+      <DataType>text|0</DataType>
+      <StateNumber>1706</StateNumber>
+    </column>
+    <column id="76" parent="23" name="nsfw">
+      <Position>3</Position>
+      <DataType>boolean|0</DataType>
+      <StateNumber>1706</StateNumber>
+      <DefaultExpression>false</DefaultExpression>
+    </column>
+    <column id="77" parent="23" name="username">
+      <Position>4</Position>
+      <DataType>text|0</DataType>
+      <StateNumber>1706</StateNumber>
+    </column>
+    <column id="78" parent="23" name="passhash">
+      <Position>5</Position>
+      <DataType>text|0</DataType>
+      <StateNumber>1706</StateNumber>
+    </column>
+    <column id="79" parent="23" name="premium">
+      <Position>6</Position>
+      <DataType>boolean|0</DataType>
+      <StateNumber>1706</StateNumber>
+      <DefaultExpression>false</DefaultExpression>
+    </column>
+    <index id="80" parent="23" name="pk_user">
+      <ObjectId>22958</ObjectId>
+      <ColNames>id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="81" parent="23" name="pk_user">
+      <ObjectId>22959</ObjectId>
+      <ColNames>id</ColNames>
+      <UnderlyingIndexName>pk_user</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <column id="82" parent="24" name="achievement_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1709</StateNumber>
+    </column>
+    <column id="83" parent="24" name="user_id">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1709</StateNumber>
+    </column>
+    <column id="84" parent="24" name="score">
+      <Position>3</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>1709</StateNumber>
+    </column>
+    <index id="85" parent="24" name="pk_user_achievements">
+      <ObjectId>23002</ObjectId>
+      <ColNames>achievement_id
+user_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="86" parent="24" name="pk_user_achievements">
+      <ObjectId>23003</ObjectId>
+      <ColNames>achievement_id
+user_id</ColNames>
+      <UnderlyingIndexName>pk_user_achievements</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="87" parent="24" name="users_achievements_achievement_id_fkey">
+      <ObjectId>23004</ObjectId>
+      <ColNames>achievement_id</ColNames>
+      <RefTableName>achievements</RefTableName>
+      <RefKeyName>pk_achievement</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="88" parent="24" name="users_achievements_user_id_fkey">
+      <ObjectId>23009</ObjectId>
+      <ColNames>user_id</ColNames>
+      <RefTableName>users</RefTableName>
+      <RefKeyName>pk_user</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="89" parent="25" name="user_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1710</StateNumber>
+    </column>
+    <column id="90" parent="25" name="friend_id">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1710</StateNumber>
+    </column>
+    <index id="91" parent="25" name="pk_user_friends">
+      <ObjectId>23017</ObjectId>
+      <ColNames>user_id
+friend_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="92" parent="25" name="pk_user_friends">
+      <ObjectId>23018</ObjectId>
+      <ColNames>user_id
+friend_id</ColNames>
+      <UnderlyingIndexName>pk_user_friends</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="93" parent="25" name="users_friends_user_id_fkey">
+      <ObjectId>23019</ObjectId>
+      <ColNames>user_id</ColNames>
+      <RefTableName>users</RefTableName>
+      <RefKeyName>pk_user</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="94" parent="25" name="users_friends_friend_id_fkey">
+      <ObjectId>23024</ObjectId>
+      <ColNames>friend_id</ColNames>
+      <RefTableName>users</RefTableName>
+      <RefKeyName>pk_user</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <column id="95" parent="26" name="role_id">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1711</StateNumber>
+    </column>
+    <column id="96" parent="26" name="user_id">
+      <Position>2</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>1711</StateNumber>
+    </column>
+    <index id="97" parent="26" name="pk_user_roles">
+      <ObjectId>23032</ObjectId>
+      <ColNames>role_id
+user_id</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="98" parent="26" name="pk_user_roles">
+      <ObjectId>23033</ObjectId>
+      <ColNames>role_id
+user_id</ColNames>
+      <UnderlyingIndexName>pk_user_roles</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="99" parent="26" name="users_roles_role_id_fkey">
+      <ObjectId>23034</ObjectId>
+      <ColNames>role_id</ColNames>
+      <RefTableName>roles</RefTableName>
+      <RefKeyName>pk_role</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+    <foreign-key id="100" parent="26" name="users_roles_user_id_fkey">
+      <ObjectId>23039</ObjectId>
+      <ColNames>user_id</ColNames>
+      <RefTableName>users</RefTableName>
+      <RefKeyName>pk_user</RefKeyName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
+  </database-model>
+</dataSource>

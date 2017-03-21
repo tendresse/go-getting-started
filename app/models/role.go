@@ -7,6 +7,6 @@ import (
 
 type Role struct {
 	ID 	int		`json:"id,omitempty"`
-	Name 	string		`json:"name,omitempty"`
-	Users 	[]User		`pg:",many2many:item_to_items,joinFK:User" json:"users,omitempty"`
+	Title 	string		`json:"title,omitempty"`
+	Users 	[]*User		`pg:",many2many:users_roles,joinFK:User" json:"users,omitempty"`
 }

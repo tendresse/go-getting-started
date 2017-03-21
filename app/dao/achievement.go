@@ -2,57 +2,53 @@ package dao
 
 import (
 	// "encoding/json"
-
-	"github.com/tendresse/go-getting-started/app/config"
 	"github.com/tendresse/go-getting-started/app/models"
-
-	_ "gopkg.in/pg.v5"
+	"gopkg.in/pg.v5"
 )
 
+
 type Achievement struct{
+	DB 	*pg.DB
 }
 
 
+func (c Achievement) CreateAchievement(achievement *models.Achievement) error {
+	return c.DB.Insert(achievement)
+}
+
+func (c Achievement) CreateAchievements(achievements *[]models.Achievement) error {
+	return c.DB.Insert(achievements)
+}
+
+func (c Achievement) UpdateAchievement(achievement *models.Achievement) error {
+	return c.DB.Update(achievement)
+}
+
 func (c Achievement) GetAchievement(achievement *models.Achievement) error {
-	return config.Global.DB.Select(&achievement)
+	return c.DB.Select(&achievement)
+}
+
+func (c Achievement) DeleteAchievement(achievement *models.Achievement) error {
+	return c.DB.Delete(&achievement)
 }
 
 func (c Achievement) GetFullAchievement(achievement *models.Achievement) error {
-	return config.Global.DB.Model(&achievement).Column("achievement.*", "Tag").First()
-}
-
-func (c Achievement) GetAchievements(achievements *[]models.Achievement) error {
-	return config.Global.DB.Model(&achievements).Select()
-}
-
-func (c Achievement) GetFullAchievements(achievements *[]models.Achievement) error {
-	return config.Global.DB.Model(&achievements).Column("achievement.*", "Tag").Select()
+	return c.DB.Model(&achievement).Column("achievement.*", "Tag").First()
 }
 
 func (c Achievement) GetAchievementByTitle(title string, achievement *models.Achievement) error {
-	return config.Global.DB.Model(&achievement).Where("title = ?",title).Select()
+	return c.DB.Model(&achievement).Where("title = ?",title).Select()
 }
 
-func (c Achievement) CreateAchievement(achievement *models.Achievement) error {
-	return config.Global.DB.Insert(achievement)
+func (c Achievement) GetAchievements(achievements *[]models.Achievement) error {
+	return c.DB.Model(&achievements).Select()
 }
 
-
-func (c Achievement) GetAchievementByAchievementname(Achievementname string, Achievement *models.Achievement) error {
-	return config.Global.DB.Model(&Achievement).Where("Achievementname = ?",Achievementname).Select()
+func (c Achievement) GetFullAchievements(achievements *[]models.Achievement) error {
+	return c.DB.Model(&achievements).Column("achievement.*", "Tag").Select()
 }
 
-
-func (c Achievement) GetAchievementsByIds(ids []int, Achievements []*models.Achievement) error {
-	return nil
+func (c Achievement) DeleteAchievements(achievements *[]models.Achievement) error {
+	return c.DB.Delete(&achievements)
 }
 
-func (c Achievement) GetAchievementFriends(Achievement *models.Achievement, friends []*models.Achievement) error {
-	return nil
-}
-
-
-func (c Achievement) GetAchievementAchievements(id int, Achievement *models.Achievement) error {
-
-	return nil
-}
