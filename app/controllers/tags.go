@@ -10,10 +10,7 @@ import (
 	"github.com/tendresse/go-getting-started/app/models"
 
 	log "github.com/Sirupsen/logrus"
-	_ "github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	_ "github.com/lib/pq"
+	"github.com/tendresse/go-getting-started/app/dao"
 )
 
 type TagsController struct {
@@ -22,8 +19,9 @@ type TagsController struct {
 // wrap with admin rights
 func (c TagsController) GetTags() string {
 	// TODO : CHOOSE WHAT JSON TO RETURN
+	tags_dao := dao.Tag{DB:config.Global.DB}
 	tags := []models.Tag{}
-	if err := config.Global.DB.Find(&tags).Error; err != nil {
+	if err := tags_dao.GetAllTags(&tags); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"no tag found"}`
 	}
@@ -37,8 +35,9 @@ func (c TagsController) GetTags() string {
 
 //admin
 func (c TagsController) GetTag(tag_id int) string {
-	tag := models.Tag{}
-	if err := config.Global.DB.First(&tag, tag_id).Error; err != nil {
+	tags_dao := dao.Tag{DB:config.Global.DB}
+	tag := models.Tag{ID:tag_id}
+	if err := tags_dao.GetFullTag(&tag); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"tag not found"}`
 	}
@@ -52,49 +51,56 @@ func (c TagsController) GetTag(tag_id int) string {
 
 //admin
 func (c TagsController) AddTag(tag_json string) string {
+	tags_dao := dao.Tag{DB:config.Global.DB}
 	tag := models.Tag{}
 	if err := json.Unmarshal([]byte(tag_json), &tag); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error while marshaling tag json"}`
 	}
-	if config.Global.DB.Where("Name = ?", tag.Name).First(&tag).Error != nil {
-		if err := config.Global.DB.Create(&tag).Error; err != nil {
-			log.Error(err)
-			return `{"success":false, "error":"error while creating Gif"}`
-		}
-		return strings.Join([]string{`{"success":true, "tag":`, string(tag.ID), "}"}, "")
+	if err := tags_dao.GetTagByTitle(tag.Title, &tag); err == nil {
+		log.Error(err)
+		return `{"success":false, "error":"tag already exists"}`
 	}
-	return `{"success":false, "error":"tag already exists"}`
+	if err := tags_dao.CreateTag(&tag); err != nil {
+		log.Error(err)
+		return `{"success":false, "error":"error while creating Gif"}`
+	}
+	return strings.Join([]string{`{"success":true, "tag":`, string(tag.ID), "}"}, "")
 }
 
 //admin
 func (c TagsController) UpdateTag(tag_json string) string {
-	tag := models.Tag{}
+	tags_dao := dao.Tag{DB:config.Global.DB}
 	updated_tag := models.Tag{}
 	if err := json.Unmarshal([]byte(tag_json), &updated_tag); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error while marshaling tag json"}`
 	}
-	// First is used without Preloading Tags in order to replace them
-	if err := config.Global.DB.First(&tag, updated_tag.ID).Error; err != nil {
+	tag := models.Tag{ID:updated_tag.ID}
+	if err := tags_dao.GetTag(&tag); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"tag not found"}`
 	}
-	// we check if the new Title is not already taken
-	if strings.Compare(updated_tag.Name, tag.Name) != 0 {
-		if err := config.Global.DB.Where("Title = ?", updated_tag.Name).First(&tag).Error; err != nil {
+	// if Title has changed we check if not already taken
+	if strings.Compare(updated_tag.Title, tag.Title) != 0 {
+		if err := tags_dao.GetTagByTitle(updated_tag.Title,&updated_tag); err == nil {
 			log.Error(err)
 			return `{"success":false, "error":"tag name already taken"}`
 		}
 	}
-	config.Global.DB.Save(&tag)
+	tag.Title = updated_tag.Title
+	if err := tags_dao.UpdateTag(&updated_tag); err == nil {
+		log.Error(err)
+		return `{"success":false, "error":"error while updating tag"}`
+	}
 	return `{"success":true}`
 }
 
 //admin
 func (c TagsController) DeleteTag(tag_id int) string {
-	tag := models.Tag{}
-	if err := config.Global.DB.Delete(&tag, tag_id).Error; err != nil {
+	tags_dao := dao.Tag{DB:config.Global.DB}
+	tag := models.Tag{ID:tag_id}
+	if err := tags_dao.DeleteTag(&tag).Error; err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"tag already deleted"}`
 	}

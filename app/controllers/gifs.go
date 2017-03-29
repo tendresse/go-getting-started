@@ -7,32 +7,21 @@ import (
 	"strings"
 
 	"github.com/tendresse/go-getting-started/app/config"
+	"github.com/tendresse/go-getting-started/app/dao"
 	"github.com/tendresse/go-getting-started/app/models"
 
 	log "github.com/Sirupsen/logrus"
-	_ "github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	_ "github.com/lib/pq"
 )
 
 type GifsController struct {
 }
 
-func (c GifsController) RandomGif() models.Gif {
+func (c GifsController) RandomGif() string {
+	gifs_dao := dao.Gif{DB:config.Global.DB}
 	gif := models.Gif{}
-	if err := config.Global.DB.Preload("Tags").Order("RANDOM()").First(&gif).Error; err != nil {
+	if err := gifs_dao.GetRandomGif(&gif); err != nil {
 		log.Error(err)
-		return nil
-	}
-	return gif
-}
-
-func (c GifsController) RandomJSONGif() string {
-	gif := models.Gif{}
-	if err := config.Global.DB.Preload("Tags").Order("RANDOM()").First(&gif).Error; err != nil {
-		log.Error(err)
-		return `{"success":false, "error":"no gif found"}`
+		return `{"success":false, "error":"error while getting gif"}`
 	}
 	b, err := json.Marshal(gif)
 	if err != nil {
@@ -40,14 +29,13 @@ func (c GifsController) RandomJSONGif() string {
 		return `{"success":false, "error":"error while marshaling gif"}`
 	}
 	return strings.Join([]string{`{"success":true, "gif":`, string(b), "}"}, "")
-
-	// return '{"Id":3,"BlogID":2,"Url":"http://i.giphy.com/xTgeIYpiaiWvWHyWwU.gif","LameScore":4}'
 }
 
 //admin
 func (c GifsController) GetGif(gif_id int) string {
-	gif := models.Gif{}
-	if err := config.Global.DB.First(&gif, gif_id).Error; err != nil {
+	gifs_dao := dao.Gif{DB:config.Global.DB}
+	gif := models.Gif{ID:gif_id}
+	if err := gifs_dao.GetFullGif(&gif); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"gif not found"}`
 	}
@@ -60,9 +48,24 @@ func (c GifsController) GetGif(gif_id int) string {
 }
 
 //admin
+func (c GifsController) GetGifs() string {
+	gifs_dao := dao.Gif{DB:config.Global.DB}
+	gifs, err := gifs_dao.GetAllGifs()
+	if err != nil {
+		log.Error(err)
+		return `{"success":false, "error":"gif not found"}`
+	}
+	b, err := json.Marshal(gifs)
+	if err != nil {
+		log.Error(err)
+		return `{"success":false, "error":"error while marshaling gifs"}`
+	}
+	return strings.Join([]string{`{"success":true, "gifs":`, string(b), "}"}, "")
+}
+
+//admin
 func (c GifsController) SearchGifsByTags(tags_json string) string {
-	// db.Limit(3).Find(&users)
-	// db.Preload("Orders", "state = ?", "paid").Preload("Orders.OrderItems").Find(&users)
+	// TODO : test SearchGifsByTags
 	type TagsJSON struct {
 		Tags []models.Tag `json:"tags,omitempty"`
 	}
@@ -70,23 +73,34 @@ func (c GifsController) SearchGifsByTags(tags_json string) string {
 	if err := json.Unmarshal([]byte(tags_json), &tags); err != nil {
 		log.Error(err)
 	}
-	gifs := []models.Gif{}
-	// loop for finding the gifs matching ALL the tags given
-	for i, _ := range tags.Tags {
-		if err := config.Global.DB.Where(models.Tag{Name: tags.Tags[i].Name}).First(&tags.Tags[i]).Error; err != nil {
+	tags_dao := dao.Tag{DB:config.Global.DB}
+	gifs     := []models.Gif{}
+	final_gifs := []models.Gif{}
+	first := true
+	// for each tag, get the gifs corresponding
+	for i,_ := range tags.Tags {
+		if err := tags_dao.GetTagByTitle(tags.Tags[i].Title,&tags.Tags[i]); err != nil {
 			log.Error(err)
 			continue
 		}
-		if i == 0 {
-			if err := config.Global.DB.Debug().Model(&tags.Tags[i]).Related(&gifs, "Gifs").Error; err != nil {
-				log.Error(err)
-				return `{"success":false, "error":"error while fetching data"}`
-			}
+		if err := tags_dao.GetFullTag(&tags.Tags[i]); err != nil {
+			log.Error(err)
+			return `{"success":false, "error":"error while fetching data"}`
+		}
+		if first {
+			gifs = tags.Tags[i].Gifs
+			first = false
 		} else {
-			if err := config.Global.DB.Debug().Model(&tags.Tags[i]).Where(&gifs).Related(&gifs, "Gifs").Error; err != nil {
-				log.Error(err)
-				return `{"success":false, "error":"error while fetching data"}`
+			CommonTags:
+			for j,_ := range gifs {
+				for k,_ := range tags.Tags[i].Gifs {
+					if gifs[j].ID == tags.Tags[i].Gifs[k].ID{
+						final_gifs = append(final_gifs, gifs[j])
+						continue CommonTags
+					}
+				}
 			}
+			gifs = final_gifs
 		}
 	}
 	b, err := json.Marshal(gifs)
@@ -99,64 +113,83 @@ func (c GifsController) SearchGifsByTags(tags_json string) string {
 
 //admin
 func (c GifsController) AddGif(gif_json string) string {
+	gifs_dao := dao.Gif{DB:config.Global.DB}
+
 	gif := models.Gif{}
 	if err := json.Unmarshal([]byte(gif_json), &gif); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error while marshaling gif json"}`
 	}
-	if config.Global.DB.Where("Url = ?", gif.Url).First(&gif).Error != nil {
-		for i, _ := range gif.Tags {
-			if err := config.Global.DB.Where(models.Tag{Name: gif.Tags[i].Name}).FirstOrCreate(&gif.Tags[i]).Error; err != nil {
-				log.Error(err)
-				return `{"success":false, "error":"error while fetching Tags"}`
-			}
-		}
-		if err := config.Global.DB.Create(&gif).Error; err != nil {
-			log.Error(err)
-			return `{"success":false, "error":"error while creating Gif"}`
-		}
-		return strings.Join([]string{`{"success":true, "gif":`, string(gif.ID), "}"}, "")
+	if err := gifs_dao.GetGifByUrl(&gif); err == nil {
+		log.Error(err)
+		return `{"success":false, "error":"gif already exists"}`
 	}
-	return `{"success":false, "error":"gif already exists"}`
+	if err := gifs_dao.CreateGif(&gif); err != nil {
+		log.Error(err)
+		return `{"success":false, "error":"error while creating gif"}`
+	}
+	tags_dao := dao.Tag{DB:config.Global.DB}
+	for i, _ := range gif.Tags {
+		if err := tags_dao.GetOrCreateTag(&gif.Tags[i]); err != nil {
+			log.Error(err)
+			return `{"success":false, "error":"error while creating Tag"}`
+		}
+		if err := gifs_dao.AddTagToGif(&models.Tag{ID:gif.Tags[i].ID}, &gif); err != nil {
+			log.Error(err)
+			return `{"success":false, "error":"error while creating Tag"}`
+		}
+	}
+	return strings.Join([]string{`{"success":true, "gif":`, string(gif.ID), "}"}, "")
 }
 
 //admin
 func (c GifsController) UpdateGif(gif_json string) string {
-	gif := models.Gif{}
+	gifs_dao := dao.Gif{DB:config.Global.DB}
+	tags_dao := dao.Tag{DB:config.Global.DB}
+
 	updated_gif := models.Gif{}
-	if err := json.Unmarshal([]byte(gif_json), &updated_gif); err != nil {
+	if err := json.Unmarshal([]byte(gif_json), &updated_gif); err != nil{
 		log.Error(err)
-		return `{"success":false, "error":"error while marshaling gif json"}`
+		return `{"success":false, "error":"marshal achievement json error"}`
 	}
-	// First is used without Preloading Tags in order to replace them
-	if err := config.Global.DB.First(&gif, updated_gif.ID).Error; err != nil {
+	gif := models.Gif{ID:updated_gif.ID}
+	if err := gifs_dao.GetGif(&gif); err != nil {
 		log.Error(err)
-		return `{"success":false, "error":"gif not found"}`
+		return `{"success":false, "error":"achievement not found"}`
 	}
-	// we check if the new Title is not already taken
-	if strings.Compare(updated_gif.Url, gif.Url) != 0 {
-		if err := config.Global.DB.Where("Title = ?", updated_gif.Url).First(&gif).Error; err != nil {
+
+	FetchTags:
+	for i, _ := range updated_gif.Tags {
+		if err := tags_dao.GetOrCreateTag(&updated_gif.Tags[i]); err != nil {
 			log.Error(err)
-			return `{"success":false, "error":"gif url already taken"}`
 		}
-	}
-	for i, _ := range gif.Tags {
-		if err := config.Global.DB.Where(models.Tag{Name: gif.Tags[i].Name}).FirstOrCreate(&gif.Tags[i]).Error; err != nil {
-			log.Error(err)
-			return `{"success":false, "error":"erro while fetching Tags"}`
+		for j,_ := range gif.Tags {
+			if updated_gif.Tags[i].ID == gif.Tags[j].ID {
+				continue FetchTags
+			}
 		}
+		// new tag so should be linked
+		gifs_dao.AddTagToGif(&updated_gif.Tags[i], &gif)
 	}
-	config.Global.DB.Save(&gif)
-	config.Global.DB.Model(&gif).Association("Tags").Replace(&updated_gif.Tags)
-	return `{"success":true}`
+	CurrentTags:
+	for i,_ := range gif.Tags {
+		for j, _ := range updated_gif.Tags {
+			if updated_gif.Tags[j].ID == gif.Tags[i].ID {
+				continue CurrentTags
+			}
+		}
+		// new tag so should be unlinked
+		gifs_dao.DeleteTagFromGif(&gif.Tags[i],&gif)
+	}
+	return strings.Join([]string{`{"success":true, "gif":` , string(gif.ID) , "}"} , "")
 }
 
 //admin
 func (c GifsController) DeleteGif(gif_id int) string {
-	gif := models.Achievement{}
-	if err := config.Global.DB.Delete(&gif, gif_id).Error; err != nil {
+	gifs_dao := dao.Gif{DB : config.Global.DB}
+	if err := gifs_dao.DeleteGif(&models.Gif{ID:gif_id}); err != nil {
 		log.Error(err)
-		return `{"success":false, "error":"gif already deleted"}`
+		return `{"success":false, "error":"error while deleting gif"}`
 	}
 	return `{"success":true}`
 }

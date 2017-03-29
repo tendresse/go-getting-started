@@ -1,4 +1,4 @@
-// TENDRESSE controllers/achievements_controllers.go
+// controllers/achievements_controllers.go
 
 package controllers
 
@@ -11,22 +11,17 @@ import (
 	"github.com/tendresse/go-getting-started/app/models"
 
 	log "github.com/Sirupsen/logrus"
-	_ "github.com/jinzhu/gorm"
-	_ "github.com/lib/pq"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 
 type AchievementsController struct {
 }
 
-var achievements_dao dao.Achievement
-
 // wrap with admin rights
 func (c AchievementsController) GetAchievements() string {
+	achievements_dao := dao.Achievement{DB:config.Global.DB}
 	achievements := []models.Achievement{}
-	if err := achievements_dao.GetFullAchievements(&achievements); err != nil {
+	if err := achievements_dao.GetAllAchievements(&achievements); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"no achievements found"}`
 	}
@@ -40,7 +35,9 @@ func (c AchievementsController) GetAchievements() string {
 
 // wrap with admin rights
 func (c AchievementsController) GetAchievement(achievement_id int) string {
-	achievement := models.Achievement{}
+	achievements_dao := dao.Achievement{DB:config.Global.DB}
+	achievement := models.Achievement{ID:achievement_id}
+
 	if err := achievements_dao.GetFullAchievement(&achievement); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"achievement not found"}`
@@ -55,59 +52,71 @@ func (c AchievementsController) GetAchievement(achievement_id int) string {
 
 // wrap with admin rights
 func (c AchievementsController) CreateAchievement(achievement_json string) string {
-	achievement := models.Achievement{}
+	achievements_dao := dao.Achievement{DB:config.Global.DB}
+	tags_dao         := dao.Tag{DB:config.Global.DB}
+
+	achievement      := models.Achievement{}
 	if err := json.Unmarshal([]byte(achievement_json), &achievement); err != nil{
 		log.Error(err)
 		return `{"success":false, "error":"marshal achievement json error"}`
 	}
 	if err := achievements_dao.GetAchievementByTitle(achievement.Title, &achievement); err != nil {
-		for i,_ := range achievement.Tags {
-			if err := config.Global.DB.Where(models.Tag{Name: achievement.Tags[i].Name}).FirstOrCreate(&achievement.Tags[i]).Error; err != nil {
-				log.Error(err)
-				return `{"success":false, "error":"error while fetching Tags"}`
-			}
-		}
-		config.Global.DB.Create(&achievement)
-		return strings.Join([]string{`{"success":true, "achievement":` , string(achievement.ID) , "}"} , "")
+		log.Error(err)
+		return `{"success":false, "error":"achievement already exists"}`
 	}
-	return `{"success":false, "error":"achievement already exists"}`
+	tag    := models.Tag{Title:achievement.Tag.Title}
+	if err := tags_dao.GetOrCreateTag(&tag); err != nil {
+		log.Error(err)
+		return `{"success":false, "error":"error while fetching Tags"}`
+	}
+	achievement.TagID = tag.ID
+	achievements_dao.CreateAchievement(&achievement)
+	return strings.Join([]string{`{"success":true, "achievement":` , string(achievement.ID) , "}"} , "")
 }
 
 // wrap with admin rights
 func (c AchievementsController) UpdateAchievement(achievement_json string) string {
-	achievement := models.Achievement{}
+	achievements_dao    := dao.Achievement{DB:config.Global.DB}
+	tags_dao            := dao.Tag{DB:config.Global.DB}
+
 	updated_achievement := models.Achievement{}
 	if err := json.Unmarshal([]byte(achievement_json), &updated_achievement); err != nil{
 		log.Error(err)
 		return `{"success":false, "error":"marshal achievement json error"}`
 	}
-	// First is used without Preloading Tags in order to replace them
-	if err := config.Global.DB.First(&achievement, updated_achievement.ID).Error; err != nil {
+
+	achievement := models.Achievement{ID:updated_achievement.ID}
+	if err := achievements_dao.GetAchievement(&achievement); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"achievement not found"}`
 	}
-	// we check if the new Title is not already taken
+	// if Title has changed, we check if the new Title is not already taken
 	if strings.Compare(updated_achievement.Title, achievement.Title) != 0 {
-		if err := config.Global.DB.Where("Title = ?",updated_achievement.Title).First(&achievement).Error; err != nil {
+		if err := achievements_dao.GetAchievementByTitle(updated_achievement.Title, nil); err != nil {
 			log.Error(err)
 			return `{"success":false, "error":"achievement title already taken"}`
 		}
 	}
-	for i,_ := range achievement.Tags {
-		if err := config.Global.DB.Where(models.Tag{Name: achievement.Tags[i].Name}).FirstOrCreate(&achievement.Tags[i]).Error; err != nil {
+	// if Tag has changed, we fetch or create the Tag
+	if strings.Compare(updated_achievement.Tag.Title, achievement.Tag.Title) != 0 {
+		tag := models.Tag{Title:achievement.Tag.Title}
+		if err := tags_dao.GetOrCreateTag(&tag); err != nil {
 			log.Error(err)
-			return `{"success":false, "error":"erro while fetching Tags"}`
+			return `{"success":false, "error":"error while fetching Tags"}`
 		}
+		updated_achievement.TagID = tag.ID
 	}
-	config.Global.DB.Save(&achievement)
-	config.Global.DB.Model(&achievement).Association("Tags").Replace(&updated_achievement.Tags)
+	if err := achievements_dao.UpdateAchievement(&updated_achievement); err != nil{
+		log.Error(err)
+		return `{"success":false, "error":"error while updating Achievement"}`
+	}
 	return strings.Join([]string{`{"success":true, "achievement":` , string(achievement.ID) , "}"} , "")
 }
 
 // wrap with admin rights
 func (c AchievementsController) DeleteAchievement(achievement_id int) string {
-	achievement := models.Achievement{}
-	if err := config.Global.DB.Delete(&achievement, achievement_id).Error; err != nil {
+	achievements_dao := dao.Achievement{DB:config.Global.DB}
+	if err := achievements_dao.DeleteAchievement(&models.Achievement{ID:achievement_id}).Error; err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"achievement already deleted"}`
 	}

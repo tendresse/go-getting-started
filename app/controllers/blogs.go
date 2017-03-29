@@ -9,21 +9,18 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"os"
 
+	"github.com/tendresse/go-getting-started/app/dao"
 	"github.com/tendresse/go-getting-started/app/config"
 	"github.com/tendresse/go-getting-started/app/models"
 
 	log "github.com/Sirupsen/logrus"
-	_ "github.com/jinzhu/gorm"
-	_ "github.com/lib/pq"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 
 type BlogsController struct {
 }
+
 
 type errorString struct {
 	s string
@@ -64,10 +61,9 @@ func fetchTumblr(url string) (models.Tumblr,error) {
 
 // wrap with admin rights
 func (c BlogsController) GetBlogs() string {
-	// TODO : CHOOSE WHAT JSON TO RETURN
-	// on pourrait use un select ou un omit sur la query
+	blogs_dao := dao.Blog{DB : config.Global.DB}
 	blogs := []models.Blog{}
-	if err := config.Global.DB.Find(&blogs).Error; err != nil {
+	if err := blogs_dao.GetAllBlogs(&blogs); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"no blog found"}`
 	}
@@ -81,9 +77,9 @@ func (c BlogsController) GetBlogs() string {
 
 // wrap with admin rights
 func (c BlogsController) GetBlog(blog_id int) string {
-	// TODO : CHOOSE WHAT JSON TO RETURN
-	blog := models.Blog{}
-	if err := config.Global.DB.First(&blog, blog_id).Error; err != nil {
+	blogs_dao := dao.Blog{DB : config.Global.DB}
+	blog := models.Blog{ID:blog_id}
+	if err := blogs_dao.GetFullBlog(&blog); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"blog not found"}`
 	}
@@ -97,22 +93,19 @@ func (c BlogsController) GetBlog(blog_id int) string {
 
 // wrap with admin rights
 func (c BlogsController) AddBlog(blog_url string) string {
-    // regex, user input data validation
-
-	blog := models.Blog{}
-	if config.Global.DB.Where("Url = ?",blog_url).First(&blog).Error != nil {
-		blog = models.Blog{Url: blog_url}
-		config.Global.DB.Create(&blog)
-	} else {
+	blogs_dao := dao.Blog{DB : config.Global.DB}
+	tags_dao  := dao.Tag{DB:config.Global.DB}
+	gifs_dao  := dao.Gif{DB:config.Global.DB}
+	blog      := models.Blog{}
+	if err := blogs_dao.GetBlogByUrl(blog_url, &blog); err != nil {
+		log.Error(err)
 		return `{"success":false, "error":"blog already exists"}`
 	}
-
-	known_tags := []models.Tag{}
-	banned_tags := []models.Tag{}
-	if config.Global.DB.Where("Banned = ?","true").Find(&banned_tags).Error != nil {
-		banned_tags = []models.Tag{}
+	blog = models.Blog{Url: blog_url}
+	if err := blogs_dao.CreateBlog(&blog); err != nil {
+		log.Error(err)
+		return `{"success":false, "error":"error while creating the blog"}`
 	}
-
 	blog_url = strings.Join([]string{"https://api.tumblr.com/v2/blog/",blog_url,"/posts/photo?api_key=",config.Global.TumblrAPIKey},"")
 	tumblr,err := fetchTumblr(blog_url)
 	if err != nil{
@@ -139,32 +132,29 @@ func (c BlogsController) AddBlog(blog_url string) string {
 			if strings.Compare(gif_url[len(gif_url)-3:],"gif") != 0 {
 				continue
 			}
-			gif := models.Gif{}
-			config.Global.DB.Where(models.Gif{Url: gif_url}).FirstOrCreate(&gif)
-			config.Global.DB.Model(&gif).Association("Blog").Append(blog)
-			for _,post_tags := range post.Tags {
-				Tags:
-				for _,tag_title := range strings.Split(post_tags, " ") {
-					tag := models.Tag{Name: tag_title}
-                    			// check if tag is not too short
-					if len(tag_title) < 2{
-						continue 
+			gif := models.Gif{Url:gif_url}
+			if err := gifs_dao.GetOrCreateGif(&gif); err != nil {
+				log.Error(err)
+			}
+			gif.BlogID = blog.ID
+			if err := gifs_dao.UpdateGif(&gif); err != nil {
+				log.Error(err)
+			}
+			Tags:
+			for _,tag_title := range post.Tags {
+				tag := models.Tag{Title: tag_title}
+				// check if tag is not too short
+				if len(tag_title) > 2 {
+					if err := tags_dao.GetOrCreateTag(&tag); err != nil {
+						log.Error(err)
+						continue Tags
 					}
-					for _,banned_tag := range banned_tags {
-						if banned_tag.Name == tag.Name {
-							continue Tags
-						}
+					if tag.Banned {
+						continue Tags
 					}
-					for _,known_tag := range known_tags {
-						if known_tag.Name == tag.Name {
-							config.Global.DB.Model(&gif).Association("Tags").Append(known_tag)
-							config.Global.DB.Model(&gif).Association("Blog").Append(blog)
-							continue Tags
-						}
+					if err := gifs_dao.AddTagToGif(&tag, &gif); err != nil {
+						log.Error(err)
 					}
-					config.Global.DB.Create(&tag)
-					append(known_tags,tag)
-					config.Global.DB.Model(&gif).Association("Tags").Append(tag)
 				}
 			}
 		}
@@ -174,11 +164,10 @@ func (c BlogsController) AddBlog(blog_url string) string {
 
 //admin
 func (c BlogsController) DeleteBlog(blog_id int) string {
-	blog := models.Blog{}
-	if err := config.Global.DB.First(&blog, blog_id).Error; err != nil {
+	blogs_dao := dao.Blog{DB : config.Global.DB}
+	if err := blogs_dao.DeleteBlog(&models.Blog{ID:blog_id}); err != nil {
 		log.Error(err)
-		return `{"success":false, "error":"blog not found"}`
+		return `{"success":false, "error":"error while deleting blog"}`
 	}
-	config.Global.DB.Delete(&blog)
 	return `{"success":true}`
 }

@@ -6,23 +6,24 @@ import (
 )
 
 type GifsTags struct {
-	TagID		int
-	GifID		int
+	TagID		int `sql:",pk"`
+	GifID		int `sql:",pk"`
 }
 
 
 type UsersAchievements struct {
-	AchievementID	int
-	UserID 		int
+	AchievementID	int `sql:",pk"`
+	UserID 		int `sql:",pk"`
 	Score		int
+	Unlocked	bool
 }
 
 type UsersFriends struct {
-	UserID 		int
-	FriendID	int
+	UserID 		int `sql:",pk"`
+	FriendID	int `sql:",pk"`
 }
 
 type UsersRoles struct {
-	RoleID		int
-	UserID		int
+	RoleID		int `sql:",pk"`
+	UserID		int `sql:",pk"`
 }

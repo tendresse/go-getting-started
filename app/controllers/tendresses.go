@@ -15,7 +15,8 @@ import (
 	_ "github.com/lib/pq"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"os/user"
+	"github.com/tendresse/go-getting-started/app/dao"
+	"strconv"
 )
 
 
@@ -23,14 +24,30 @@ type TendressesController struct {
 }
 
 func (c TendressesController) SendTendresse(user_id string) string {
-	friend := models.User{}
-	if err := config.Global.DB.First(&friend, user_id).Error; err != nil {
+	users_dao        := dao.User{DB:config.Global.DB}
+	gifs_dao         := dao.Gif{DB:config.Global.DB}
+	tendresses_dao   := dao.Tendresse{DB:config.Global.DB}
+	achievements_dao := dao.Achievement{DB:config.Global.DB}
+
+	/*
+ 	 *  gestion tendresse
+ 	*/
+	friend_id,err := strconv.Atoi(user_id)
+	if err != nil {
+		return `{"success":false, "error":"error while parsing friend id"}`
+	}
+	friend := models.User{ID:friend_id}
+	if err := users_dao.GetUser(&friend).Error; err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"friend not found"}`
 	}
-	gif := GifsController{}.RandomGif()
-	tendresse := models.Tendresse{SenderID:config.Global.CurrentUser.ID,ReceivedID:friend.ID,GifID:gif.ID}
-	if err := config.Global.DB.Create(&tendresse).Error; err != nil {
+	gif := models.Gif{}
+	if err := gifs_dao.GetRandomGif(&gif); err != nil {
+		log.Error(err)
+		return `{"success":false, "error":"error while getting gif"}`
+	}
+	tendresse := models.Tendresse{SenderID:config.Global.CurrentUser.ID,ReceiverID:friend.ID,GifID:gif.ID}
+	if err := tendresses_dao.CreateTendresse(&tendresse); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"tendresse not created"}`
 	}
@@ -39,7 +56,31 @@ func (c TendressesController) SendTendresse(user_id string) string {
 	//	log.Error(err)
 	//}
 
-	// sender achivements
+	// sender achievements
+
+	/*
+	 *  gestion des achievements
+	 */
+	// recuperer les Achievements liés aux Tags du Gif
+	for _,tag := range gif.Tags {
+		for _,achievement := range tag.Achievements {
+			ua := models.UsersAchievements{UserID:friend_id,AchievementID:achievement.ID}
+			if err := users_dao.GetOrCreateUserWithAchievement(&ua); err != nil {
+				log.Error(err)
+			}
+			if ua.Score < achievement.Condition {
+				ua.Score++
+			}
+			if ua.Score >= achievement.Condition {
+				ua.Unlocked = true
+			}
+			if err := config.Global.DB.Update(&ua); err != nil {
+				log.Error(err)
+			}
+			// UsersAchievements
+		}
+	}
+
 	user_sender_achievements := []models.Achievement{}
 	nb_tendresses_sent := config.Global.DB.Model(&config.Global.CurrentUser).Association("Friends").Count()
 	if err := config.Global.DB.Model(&config.Global.CurrentUser).Select("id").Where("TypeOf = ?","send").Association("Achievements").Find(&user_sender_achievements).Error; err != nil {
