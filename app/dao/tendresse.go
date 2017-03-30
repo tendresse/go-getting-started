@@ -66,6 +66,12 @@ func (c Tendresse) GetPendingTendresses(user *models.User) ([]models.Tendresse,e
 	return tendresses,nil
 }
 
+func (c Tendresse) CountSenderTendresses(count *int, sender_id int) error {
+	var err error
+	*count,err = c.DB.Model(&models.Tendresse{}).Where("sender_id = ?",sender_id).Count()
+	return err
+}
+
 
 func (c Tendresse) DeleteTendresse(tendresse *models.Tendresse) error {
 	return c.DB.Delete(&tendresse)

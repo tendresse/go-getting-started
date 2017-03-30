@@ -4,7 +4,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"strings"
+	"strconv"
 
 	"github.com/tendresse/go-getting-started/app/config"
 	"github.com/tendresse/go-getting-started/app/models"
@@ -16,7 +16,6 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/tendresse/go-getting-started/app/dao"
-	"strconv"
 )
 
 
@@ -56,12 +55,7 @@ func (c TendressesController) SendTendresse(user_id string) string {
 	//	log.Error(err)
 	//}
 
-	// sender achievements
-
-	/*
-	 *  gestion des achievements
-	 */
-	// recuperer les Achievements liés aux Tags du Gif
+	// receiver achievements
 	for _,tag := range gif.Tags {
 		for _,achievement := range tag.Achievements {
 			ua := models.UsersAchievements{UserID:friend_id,AchievementID:achievement.ID}
@@ -71,15 +65,21 @@ func (c TendressesController) SendTendresse(user_id string) string {
 			if ua.Score < achievement.Condition {
 				ua.Score++
 			}
-			if ua.Score >= achievement.Condition {
-				ua.Unlocked = true
+			if ua.Unlocked != true {
+				if ua.Score >= achievement.Condition {
+					ua.Unlocked = true
+				}
 			}
 			if err := config.Global.DB.Update(&ua); err != nil {
 				log.Error(err)
 			}
-			// UsersAchievements
 		}
 	}
+
+	// sender achievements
+	sender_achievements := []models.Achievement{}
+
+	if err := achievements_dao.GetSenderAchievementsWithCondition(&sender_achievements,)
 
 	user_sender_achievements := []models.Achievement{}
 	nb_tendresses_sent := config.Global.DB.Model(&config.Global.CurrentUser).Association("Friends").Count()
@@ -152,16 +152,7 @@ func (c TendressesController) SendTendresse(user_id string) string {
 	return `{"success":true}`
 }
 
-//authorized
-so.On("tendresse seen", func(tendresse_id int){
-    tendresse = Tendresse.query.get(tendresse_id)
-    if tendresse is not None:
-        if tendresse.receiver is current_user:
-            tendresse.state_viewed = true
-            db.session.commit()
-            return true
-}
 
 func (c TendressesController) Notify(username_friend string) string {
-	config.Global.Server.
+	return ""
 }

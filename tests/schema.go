@@ -8,12 +8,12 @@ var create_schema = []string{
 	);`,
 	`CREATE TABLE achievements (
 		id 		SERIAL 	CONSTRAINT pk_achievement PRIMARY KEY,
-		condition   	int,
+		condition   	int     DEFAULT 10,
 		icon        	text,
 		tag_id		int	REFERENCES tags,
 		title       	text,
 		type_of      	text,
-		xp          	int
+		xp          	int     DEFAULT 10
 	);`,
 	`CREATE TABLE blogs (
 		id 		SERIAL 	CONSTRAINT pk_blog PRIMARY KEY,
@@ -55,7 +55,7 @@ var create_schema = []string{
 	`CREATE TABLE users_achievements (
 		achievement_id 	int	REFERENCES achievements ON DELETE CASCADE,
 		user_id		int	REFERENCES users ON DELETE CASCADE,
-		score        	int,
+		score        	int     DEFAULT 0,
 		unlocked	boolean	DEFAULT false,
 		CONSTRAINT pk_user_achievements PRIMARY KEY (achievement_id, user_id)
 	);`,

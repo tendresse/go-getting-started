@@ -27,11 +27,11 @@ var Global GlobalStruct
 
 func init() {
 	initDB()
-	loadDB()
+	//loadDB()
 	//testTag()
 	//testAchievement()
 	//testBlog()
-	testGif()
+	//testGif()
 	//testRole()
 	//testUser()
 	//testTendresse()
@@ -203,10 +203,15 @@ func loadDB(){
 	}
 
 	// RELATIONS USERS ACHIEVEMENTS
-	if err := users_dao.AddAchievementsToUser([]*models.Achievement{&achievement_mommy, &achievement_rider}, &user_alice); err != nil {
+	if err := users_dao.AddAchievementToUser(&achievement_mommy,&user_alice); err != nil {
 		fmt.Println("AddAchievementsToUser")
 		fmt.Println(err)
 	}
+	if err := users_dao.AddAchievementToUser(&achievement_rider,&user_alice); err != nil {
+		fmt.Println("AddAchievementsToUser")
+		fmt.Println(err)
+	}
+
 
 	// RELATION USERS ROLES
 	if err := users_dao.AddRoleToUser(&role_admin,&user_alice); err != nil {
@@ -544,19 +549,6 @@ func testUser(){
 	}
 
 
-
-	users := []*models.User{{ID:1},{ID:2}}
-	if err := users_dao.GetUsers(users); err != nil {
-		fmt.Println("GetUsers")
-		fmt.Println(err)
-	}
-
-	users_full := []*models.User{{ID:1},{ID:2}}
-	if err := users_dao.GetFullUsers(users_full); err != nil {
-		fmt.Println("GetFullUsers")
-		fmt.Println(err)
-	}
-
 	username := "updated"
 	user_alice := models.User{}
 	if err := users_dao.GetUserByUsername(&user_alice, username); err != nil {
@@ -624,23 +616,8 @@ func testUser(){
 		fmt.Println(err)
 	}
 
-	achievements := []*models.Achievement{{ID:1},{ID:2}}
-	if err := users_dao.AddAchievementsToUser(achievements, &user_create); err != nil {
-		fmt.Println("AddAchievementsToUser")
-		fmt.Println(err)
-	}
-	if err := users_dao.DeleteAchievementsFromUser(achievements, &user_create); err != nil {
-		fmt.Println("DeleteAchievementsFromUser")
-		fmt.Println(err)
-	}
-
 	if err := users_dao.DeleteUser(&user_full); err != nil {
 		fmt.Println("DeleteUser")
-		fmt.Println(err)
-	}
-	delete_users := []*models.User{{ID:2},{ID:3}}
-	if err := users_dao.DeleteUsers(delete_users); err != nil {
-		fmt.Println("DeleteUsers")
 		fmt.Println(err)
 	}
 }
@@ -672,4 +649,10 @@ func testTendresse(){
 		fmt.Println("DeleteTendresse")
 		fmt.Println(err)
 	}
+	//var count int
+	//if err := tendresses_dao.CountSenderTendresses(&count, 1); err != nil {
+	//	fmt.Println("DeleteTendresse")
+	//	fmt.Println(err)
+	//}
+	//fmt.Println(count)
 }

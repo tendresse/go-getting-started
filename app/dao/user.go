@@ -4,7 +4,6 @@ import (
 	// "encoding/json"
 	"github.com/tendresse/go-getting-started/app/models"
 	"gopkg.in/pg.v5"
-	"image/gif"
 )
 
 type User struct {

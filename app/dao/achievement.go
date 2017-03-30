@@ -75,3 +75,7 @@ func (c Achievement) DeleteAchievements(achievements []*models.Achievement) erro
 	}
 	return nil
 }
+
+func (c Achievement) GetSenderAchievementsWithCondition(achievements *[]models.Achievement, condition int) error {
+	return c.DB.Model(achievements).Where("type_of = ?","sender").Where("condition > ?",condition).Select()
+}

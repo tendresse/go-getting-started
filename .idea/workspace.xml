@@ -2,21 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="67fe24e2-33e1-41a0-8d2b-40e64d27e61f" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dataSources/8709a359-4523-4645-a80e-763f37cd129e.xml" afterPath="$PROJECT_DIR$/.idea/dataSources/8709a359-4523-4645-a80e-763f37cd129e.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/achievements.go" afterPath="$PROJECT_DIR$/app/controllers/achievements.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/blogs.go" afterPath="$PROJECT_DIR$/app/controllers/blogs.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/gifs.go" afterPath="$PROJECT_DIR$/app/controllers/gifs.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/tags.go" afterPath="$PROJECT_DIR$/app/controllers/tags.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/controllers/tendresses.go" afterPath="$PROJECT_DIR$/app/controllers/tendresses.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/dao/achievement.go" afterPath="$PROJECT_DIR$/app/dao/achievement.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/dao/blog.go" afterPath="$PROJECT_DIR$/app/dao/blog.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/dao/gif.go" afterPath="$PROJECT_DIR$/app/dao/gif.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/dao/role.go" afterPath="$PROJECT_DIR$/app/dao/role.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/dao/tag.go" afterPath="$PROJECT_DIR$/app/dao/tag.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/dao/tendresse.go" afterPath="$PROJECT_DIR$/app/dao/tendresse.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/dao/user.go" afterPath="$PROJECT_DIR$/app/dao/user.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/achievement.go" afterPath="$PROJECT_DIR$/app/models/achievement.go" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/join.go" afterPath="$PROJECT_DIR$/app/models/join.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/gorm_test.go" afterPath="$PROJECT_DIR$/tests/gorm_test.go" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/schema.go" afterPath="$PROJECT_DIR$/tests/schema.go" />
     </list>
@@ -47,20 +38,6 @@
         <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
       </PATH_ELEMENT>
     </PATH>
-    <PATH>
-      <PATH_ELEMENT>
-        <option name="myItemId" />
-        <option name="myItemType" value="com.intellij.database.view.DatabaseStructure$Root" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" value="postgres@localhost" />
-        <option name="myItemType" value="com.intellij.database.view.DbNodeDescriptor" />
-      </PATH_ELEMENT>
-      <PATH_ELEMENT>
-        <option name="myItemId" />
-        <option name="myItemType" value="com.intellij.database.view.DatabaseStructure$GroupNode" />
-      </PATH_ELEMENT>
-    </PATH>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
@@ -68,64 +45,48 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="gorm_test.go" pinned="false" current-in-tab="false">
+      <file leaf-file-name="gorm_test.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/gorm_test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1380">
-              <caret line="452" column="40" lean-forward="false" selection-start-line="452" selection-start-column="40" selection-end-line="452" selection-end-column="40" />
+            <state relative-caret-position="-836">
+              <caret line="28" column="8" lean-forward="false" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="8" />
               <folding>
                 <element signature="e#15#182#0" expanded="true" />
-                <element signature="n#!!block;n#initDB#0" expanded="false" />
                 <element signature="n#!!block;n#loadDB#0" expanded="false" />
                 <element signature="n#!!block;n#testTag#0" expanded="false" />
                 <element signature="n#!!block;n#testAchievement#0" expanded="false" />
                 <element signature="n#!!block;n#testBlog#0" expanded="false" />
+                <element signature="n#!!block;n#testGif#0" expanded="false" />
                 <element signature="n#!!block;n#testRole#0" expanded="false" />
                 <element signature="n#!!block;n#testUser#0" expanded="false" />
-                <element signature="n#!!block;n#testTendresse#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tendresses.go" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/controllers/tendresses.go">
+      <file leaf-file-name="tendresse.go" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/dao/tendresse.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="69" column="24" lean-forward="false" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="24" />
+            <state relative-caret-position="15">
+              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding>
-                <element signature="e#63#487#0" expanded="true" />
+                <element signature="e#13#122#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="user.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/dao/user.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="114" column="18" lean-forward="true" selection-start-line="114" selection-start-column="18" selection-end-line="114" selection-end-column="18" />
+      <file leaf-file-name="postgres.public.tendresses" pinned="false" current-in-tab="false">
+        <entry file="dbDummy://dbtable:/7abb7131/8709a359-4523-4645-a80e-763f37cd129e/postgres.public.tendresses">
+          <provider editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="achievement.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/achievement.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tag.go" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/models/tag.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="10" column="41" lean-forward="false" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
-              <folding />
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
             </state>
           </provider>
         </entry>
@@ -231,21 +192,21 @@
         <option value="$PROJECT_DIR$/app/models/achievement.go" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/8709a359-4523-4645-a80e-763f37cd129e/console.sql" />
         <option value="$PROJECT_DIR$/app/models/tag.go" />
-        <option value="$PROJECT_DIR$/app/dao/tendresse.go" />
         <option value="$PROJECT_DIR$/app/init.go" />
-        <option value="$PROJECT_DIR$/app/dao/achievement.go" />
         <option value="$PROJECT_DIR$/app/dao/gif.go" />
-        <option value="$PROJECT_DIR$/tests/gorm_test.go" />
         <option value="$PROJECT_DIR$/app/controllers/achievements.go" />
         <option value="$PROJECT_DIR$/app/controllers/blogs.go" />
         <option value="$PROJECT_DIR$/app/dao/blog.go" />
         <option value="$PROJECT_DIR$/app/controllers/tags.go" />
         <option value="$PROJECT_DIR$/app/dao/tag.go" />
         <option value="$PROJECT_DIR$/app/controllers/gifs.go" />
-        <option value="$PROJECT_DIR$/tests/schema.go" />
         <option value="$PROJECT_DIR$/app/models/join.go" />
+        <option value="$PROJECT_DIR$/tests/schema.go" />
+        <option value="$PROJECT_DIR$/app/dao/achievement.go" />
+        <option value="$PROJECT_DIR$/app/dao/tendresse.go" />
         <option value="$PROJECT_DIR$/app/dao/user.go" />
         <option value="$PROJECT_DIR$/app/controllers/tendresses.go" />
+        <option value="$PROJECT_DIR$/tests/gorm_test.go" />
       </list>
     </option>
   </component>
@@ -256,10 +217,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1" />
-    <option name="y" value="23" />
+    <option name="y" value="22" />
     <option name="width" value="1280" />
-    <option name="height" value="714" />
+    <option name="height" value="721" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -352,24 +312,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="models" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="go-getting-started" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="go-getting-started" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="dao" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -412,8 +354,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -498,34 +440,34 @@
     <option name="remove_strategy" value="false" />
   </component>
   <component name="TestHistory">
-    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.23 at 13h 23m 56s.xml">
+    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.30 at 13h 23m 49s.xml">
       <configuration name="TestGORM in gorm_test.go" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.23 at 13h 28m 42s.xml">
+    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.30 at 13h 25m 35s.xml">
       <configuration name="TestGORM in gorm_test.go" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.23 at 13h 39m 21s.xml">
+    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.30 at 13h 25m 48s.xml">
       <configuration name="TestGORM in gorm_test.go" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.23 at 13h 39m 29s.xml">
+    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.30 at 13h 25m 55s.xml">
       <configuration name="TestGORM in gorm_test.go" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.23 at 20h 46m 26s.xml">
+    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.30 at 13h 27m 35s.xml">
       <configuration name="TestGORM in gorm_test.go" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.28 at 14h 49m 54s.xml">
+    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.30 at 13h 27m 50s.xml">
       <configuration name="TestGORM in gorm_test.go" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.28 at 14h 50m 34s.xml">
+    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.30 at 13h 27m 55s.xml">
       <configuration name="TestGORM in gorm_test.go" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.28 at 15h 04m 08s.xml">
+    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.30 at 13h 28m 37s.xml">
       <configuration name="TestGORM in gorm_test.go" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.28 at 15h 04m 39s.xml">
+    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.30 at 13h 29m 10s.xml">
       <configuration name="TestGORM in gorm_test.go" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.28 at 15h 07m 37s.xml">
+    <history-entry file="TestGORM_in_gorm_test_go - 2017.03.30 at 13h 29m 36s.xml">
       <configuration name="TestGORM in gorm_test.go" configurationId="GoTestRunConfiguration" />
     </history-entry>
   </component>
@@ -539,18 +481,18 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="23" width="1280" height="714" extended-state="6" />
+    <frame x="0" y="22" width="1280" height="721" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17609046" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18093699" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32750398" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1736672" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31832796" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31796503" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3290938" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959612" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39937598" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290938" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3990461" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -591,12 +533,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="43" />
+      <option name="time" value="44" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/controllers_test.go" />
     <entry file="file://$PROJECT_DIR$/routes.go" />
     <entry file="file://$PROJECT_DIR$/Dockerfile">
       <provider selected="true" editor-type-id="text-editor">
@@ -727,26 +668,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/user.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="17" column="66" lean-forward="false" selection-start-line="17" selection-start-column="66" selection-end-line="17" selection-end-column="66" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="dbDummy://dbtable:/7abb7131/8709a359-4523-4645-a80e-763f37cd129e/postgres.public.tendresses">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/8709a359-4523-4645-a80e-763f37cd129e/console.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -790,9 +711,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1284">
           <caret line="94" column="49" lean-forward="true" selection-start-line="94" selection-start-column="49" selection-end-line="94" selection-end-column="49" />
-          <folding>
-            <element signature="e#13#267#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -800,7 +718,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="10" column="8" lean-forward="false" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -812,48 +729,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/dao/tendresse.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="261">
-          <caret line="67" column="0" lean-forward="false" selection-start-line="67" selection-start-column="0" selection-end-line="67" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/dao/achievement.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="44" column="9" lean-forward="true" selection-start-line="44" selection-start-column="9" selection-end-line="44" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/achievements.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="20" column="57" lean-forward="false" selection-start-line="20" selection-start-column="57" selection-end-line="20" selection-end-column="57" />
-          <folding>
-            <element signature="n#!!block;n#GetAchievements#0" expanded="false" />
-            <element signature="e#735#828#0" expanded="false" />
-            <element signature="e#858#908#0" expanded="false" />
-            <element signature="n#!!block;n#GetAchievement#0" expanded="false" />
-            <element signature="e#1205#1288#0" expanded="false" />
-            <element signature="e#1341#1433#0" expanded="false" />
-            <element signature="e#1463#1512#0" expanded="false" />
-            <element signature="n#!!block;n#CreateAchievement#0" expanded="false" />
-            <element signature="e#1859#1951#0" expanded="false" />
-            <element signature="e#2435#2501#0" expanded="false" />
-            <element signature="n#!!block;n#UpdateAchievement#0" expanded="false" />
-            <element signature="e#2866#2958#0" expanded="false" />
-            <element signature="e#3091#3174#0" expanded="false" />
-            <element signature="e#3319#3515#0" expanded="false" />
-            <element signature="e#3416#3512#0" expanded="false" />
-            <element signature="e#3751#3841#0" expanded="false" />
-            <element signature="e#3961#4055#0" expanded="false" />
-            <element signature="e#4085#4151#0" expanded="false" />
-            <element signature="n#!!block;n#DeleteAchievement#0" expanded="false" />
-            <element signature="e#4428#4517#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -886,12 +765,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="173">
           <caret line="68" column="9" lean-forward="true" selection-start-line="68" selection-start-column="9" selection-end-line="68" selection-end-column="9" />
-          <folding>
-            <element signature="n#!!block;n#fetchTumblr#0" expanded="false" />
-            <element signature="n#!!block;n#GetBlog#0" expanded="false" />
-            <element signature="n#!!block;n#AddBlog#0" expanded="false" />
-            <element signature="n#!!block;n#DeleteBlog#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -932,27 +805,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
           <caret line="25" column="27" lean-forward="true" selection-start-line="25" selection-start-column="27" selection-end-line="25" selection-end-column="27" />
-          <folding>
-            <element signature="e#667#752#0" expanded="false" />
-            <element signature="e#782#826#0" expanded="false" />
-            <element signature="n#!!block;n#GetTag#0" expanded="false" />
-            <element signature="e#1016#1091#0" expanded="false" />
-            <element signature="e#1136#1224#0" expanded="false" />
-            <element signature="e#1254#1297#0" expanded="false" />
-            <element signature="n#!!block;n#AddTag#0" expanded="false" />
-            <element signature="e#1496#1589#0" expanded="false" />
-            <element signature="e#1653#1733#0" expanded="false" />
-            <element signature="e#1782#1868#0" expanded="false" />
-            <element signature="e#1898#1946#0" expanded="false" />
-            <element signature="n#!!block;n#UpdateTag#0" expanded="false" />
-            <element signature="e#2164#2257#0" expanded="false" />
-            <element signature="e#2341#2416#0" expanded="false" />
-            <element signature="e#2527#2698#0" expanded="false" />
-            <element signature="e#2608#2695#0" expanded="false" />
-            <element signature="e#2786#2872#0" expanded="false" />
-            <element signature="n#!!block;n#DeleteTag#0" expanded="false" />
-            <element signature="e#3092#3173#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -960,48 +812,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="24" selection-end-column="9" />
-          <folding>
-            <element signature="n#!!block;n#GetGif#0" expanded="false" />
-            <element signature="n#!!block;n#GetGifs#0" expanded="false" />
-            <element signature="n#!!block;n#SearchGifsByTags#0" expanded="false" />
-            <element signature="n#!!block;n#AddGif#0" expanded="false" />
-            <element signature="n#!!block;n#UpdateGif#0" expanded="false" />
-            <element signature="n#!!block;n#DeleteGif#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/tag.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="10" column="41" lean-forward="false" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/gorm_test.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1380">
-          <caret line="452" column="40" lean-forward="false" selection-start-line="452" selection-start-column="40" selection-end-line="452" selection-end-column="40" />
-          <folding>
-            <element signature="e#15#182#0" expanded="true" />
-            <element signature="n#!!block;n#initDB#0" expanded="false" />
-            <element signature="n#!!block;n#loadDB#0" expanded="false" />
-            <element signature="n#!!block;n#testTag#0" expanded="false" />
-            <element signature="n#!!block;n#testAchievement#0" expanded="false" />
-            <element signature="n#!!block;n#testBlog#0" expanded="false" />
-            <element signature="n#!!block;n#testRole#0" expanded="false" />
-            <element signature="n#!!block;n#testUser#0" expanded="false" />
-            <element signature="n#!!block;n#testTendresse#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/models/achievement.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="17" column="0" lean-forward="true" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1010,16 +820,6 @@
         <state relative-caret-position="180">
           <caret line="15" column="1" lean-forward="true" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/schema.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="58" column="32" lean-forward="false" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
-          <folding>
-            <element signature="e#2192#2253#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1041,20 +841,110 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tests/schema.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="496">
+          <caret line="67" column="35" lean-forward="true" selection-start-line="67" selection-start-column="35" selection-end-line="67" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/dao/user.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="114" column="18" lean-forward="true" selection-start-line="114" selection-start-column="18" selection-end-line="114" selection-end-column="18" />
+        <state relative-caret-position="29">
+          <caret line="2" column="7" lean-forward="false" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/dao/achievement.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1125">
+          <caret line="79" column="101" lean-forward="false" selection-start-line="79" selection-start-column="101" selection-end-line="79" selection-end-column="101" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/user.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/achievement.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/models/tag.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="10" column="41" lean-forward="false" selection-start-line="10" selection-start-column="41" selection-end-line="10" selection-end-column="41" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/controllers/tendresses.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="69" column="24" lean-forward="false" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="24" />
+        <state relative-caret-position="-1545">
+          <caret line="8" column="11" lean-forward="false" selection-start-line="8" selection-start-column="11" selection-end-line="8" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/7abb7131/8709a359-4523-4645-a80e-763f37cd129e/postgres.public.tendresses">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="dbDummy://dbtable:/7abb7131/8709a359-4523-4645-a80e-763f37cd129e/postgres.public.tendresses">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/dao/tendresse.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
           <folding>
-            <element signature="e#63#487#0" expanded="true" />
+            <element signature="e#13#122#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/gorm_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-836">
+          <caret line="28" column="8" lean-forward="false" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="8" />
+          <folding>
+            <element signature="e#15#182#0" expanded="true" />
+            <element signature="n#!!block;n#loadDB#0" expanded="false" />
+            <element signature="n#!!block;n#testTag#0" expanded="false" />
+            <element signature="n#!!block;n#testAchievement#0" expanded="false" />
+            <element signature="n#!!block;n#testBlog#0" expanded="false" />
+            <element signature="n#!!block;n#testGif#0" expanded="false" />
+            <element signature="n#!!block;n#testRole#0" expanded="false" />
+            <element signature="n#!!block;n#testUser#0" expanded="false" />
           </folding>
         </state>
       </provider>
