@@ -17,5 +17,3 @@ type User struct {
 	TendressesReceived	[]*Tendresse	`pg:",fk:Receiver" json:"tendresses_received,omitempty" `
 	TendressesSent		[]*Tendresse	`pg:",fk:Sender" json:"tendresses_sent,omitempty"`
 }
-
-

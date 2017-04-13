@@ -1,8 +1,8 @@
 package dao
 
 import (
-	// "encoding/json"
 	"github.com/tendresse/go-getting-started/app/models"
+
 	"gopkg.in/pg.v5"
 )
 
@@ -48,6 +48,11 @@ func (c User) DeleteUser(user *models.User) error {
 
 func (c User) GetFullUser(user *models.User) error {
 	return c.DB.Model(&user).Column("user.*", "TendressesSent").Column("user.*", "TendressesReceived").Column("user.*", "Roles").Column("user.*", "Friends").Column("user.*", "Achievements").First()
+}
+
+func (c User) GetProfile(user *models.User) error {
+	return c.DB.Model(&user).Column("user.*", "Achievements").First()
+
 }
 
 

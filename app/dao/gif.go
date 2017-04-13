@@ -3,8 +3,7 @@ package dao
 import (
 	"github.com/tendresse/go-getting-started/app/models"
 	"gopkg.in/pg.v5"
-	//log "github.com/Sirupsen/logrus"
-	"fmt"
+	log "github.com/Sirupsen/logrus"
 )
 
 type Gif struct {
@@ -40,22 +39,23 @@ func (c Gif) UpdateGif(gif *models.Gif) error {
 
 func (c Gif) GetRandomGif(gif *models.Gif) error {
 	// get random tag
-	var tag_id int
-	var gif_id int
-	for{
-		r, _ := c.DB.Query(&tag_id, "SELECT t.id from tags t where NOT t.banned offset random() * (select count(*) from tags) limit 1 ;")
-		if r.RowsReturned() == 0 {
-			// Tag has no Gif
-			continue
-		}
-		// get random gif from random tag
-		r, _ = c.DB.Query(&gif_id, "SELECT gif_id from gifs_tags where tag_id = ? offset random() * (select count(*) from gifs_tags where tag_id = ?) limit 1 ;",tag_id,tag_id)
-		fmt.Println(tag_id,gif_id)
-		if r.RowsReturned() == 0 {
-			// Tag has no Gif
-			continue
-		}
-		break
+	tag_id := 0
+	gif_id := 0
+	// next query fails if number of gifs is very low
+	r, err := c.DB.Query(&tag_id, "SELECT t.id from tags t where NOT t.banned offset random() * (select count(*) from tags) limit 1 ;")
+	if err != nil {
+		log.Error(err)
+	}
+	if r.RowsReturned() == 0 {
+		tag_id = 2
+	}
+	// get random gif from random tag
+	r, err = c.DB.Query(&gif_id, "SELECT gif_id from gifs_tags where tag_id = ? offset random() * (select count(*) from gifs_tags where tag_id = ?) limit 1 ;",tag_id,tag_id)
+	if err != nil {
+		log.Error(err)
+	}
+	if r.RowsReturned() == 0 {
+		gif_id = 2
 	}
 	gif.ID = gif_id
 	return c.GetFullGif(gif)

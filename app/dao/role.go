@@ -2,8 +2,8 @@ package dao
 
 import (
 	"github.com/tendresse/go-getting-started/app/models"
+
 	"gopkg.in/pg.v5"
-	//log "github.com/Sirupsen/logrus"
 )
 
 type Role struct {
@@ -23,17 +23,36 @@ func (c Role) CreateRoles(roles []*models.Role) error {
 	return nil
 }
 
-
-func (c Role) UpdateRole(role *models.Role) error {
-	return c.DB.Update(role)
-}
-
-
 func (c Role) GetRole(role *models.Role) error {
 	return c.DB.Select(&role)
 }
 func (c Role) GetRoles(roles []*models.Role) error {
 	return c.DB.Model(&roles).Select()
+}
+
+
+func (c Role) GetOrCreateRole(role *models.Role) error {
+	_,err := c.DB.Model(&role).
+	Column("id").
+	Where("title = ?", role.Title).
+	OnConflict("DO NOTHING"). // OnConflict is optional
+	Returning("id").
+	SelectOrInsert()
+	return err
+}
+
+
+func (c Role) GetAllRoles(roles *[]models.Role) (error) {
+	count, err := c.DB.Model(&models.Role{}).Count()
+	if err != nil {
+		return err
+	}
+	return c.DB.Model(&roles).Limit(count).Select()
+}
+
+
+func (c Role) UpdateRole(role *models.Role) error {
+	return c.DB.Update(role)
 }
 
 

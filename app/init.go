@@ -4,13 +4,13 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/tendresse/go-getting-started/app/controllers"
 	"github.com/tendresse/go-getting-started/app/config"
+	"github.com/tendresse/go-getting-started/app/controllers"
 
-	"gopkg.in/pg.v5"
 	log "github.com/Sirupsen/logrus"
-	"github.com/rs/cors"
 	"github.com/googollee/go-socket.io"
+	"github.com/rs/cors"
+	"gopkg.in/pg.v5"
 )
 
 func init() {
@@ -26,7 +26,7 @@ func init() {
 	config.Global.Server.On("connection", func(so socketio.Socket) {
 		config.Global.Socket = &so
 		so.Emit("chat", "hello message")
-			log.Println("on connection 42")
+		log.Println("on connection 42")
 		so.On("chat", func(msg string) {
 			log.Println("recieved message", msg)
 		})
@@ -40,8 +40,7 @@ func init() {
 		// The return type may vary depending on whether you will return
 		// For this example it is "string" type
 		so.On("chat message with ack", func(msg string) string {
-			var gifs_controller controllers.GifsController
-			return gifs_controller.RandomJSONGif()
+			return controllers.GifsController{}.RandomGif()
 		})
 		so.On("disconnection", func() {
 			log.Println("disconnected from chat")
@@ -59,15 +58,13 @@ func init() {
 	/**
 	* DEV MODE
 	*  - enable CORS
-	*/
+	 */
 	handler := cors.Default().Handler(mux)
 	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
 	})
 	handler = c.Handler(handler)
-
-	log.Println("Serving at localhost:5000...")
 }
 
 func initEnv() {
@@ -93,10 +90,10 @@ func initEnv() {
 func initDB() {
 	var err error
 	config.Global.DB = pg.Connect(&pg.Options{
-		User: "postgres",
+		User:     "postgres",
 		Database: "postgres",
 		Password: "postgres",
-		Addr: "127.0.0.1:32768",
+		Addr:     "127.0.0.1:32768",
 	})
 	if err != nil {
 		log.Fatal(err)

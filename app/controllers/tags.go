@@ -7,17 +7,17 @@ import (
 	"strings"
 
 	"github.com/tendresse/go-getting-started/app/config"
+	"github.com/tendresse/go-getting-started/app/dao"
 	"github.com/tendresse/go-getting-started/app/models"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/tendresse/go-getting-started/app/dao"
 )
 
-type TagsController struct {
+type Tag struct {
 }
 
 // wrap with admin rights
-func (c TagsController) GetTags() string {
+func (c Tag) GetTags() string {
 	// TODO : CHOOSE WHAT JSON TO RETURN
 	tags_dao := dao.Tag{DB:config.Global.DB}
 	tags := []models.Tag{}
@@ -34,7 +34,7 @@ func (c TagsController) GetTags() string {
 }
 
 //admin
-func (c TagsController) GetTag(tag_id int) string {
+func (c Tag) GetTag(tag_id int) string {
 	tags_dao := dao.Tag{DB:config.Global.DB}
 	tag := models.Tag{ID:tag_id}
 	if err := tags_dao.GetFullTag(&tag); err != nil {
@@ -50,7 +50,7 @@ func (c TagsController) GetTag(tag_id int) string {
 }
 
 //admin
-func (c TagsController) AddTag(tag_json string) string {
+func (c Tag) AddTag(tag_json string) string {
 	tags_dao := dao.Tag{DB:config.Global.DB}
 	tag := models.Tag{}
 	if err := json.Unmarshal([]byte(tag_json), &tag); err != nil {
@@ -69,7 +69,7 @@ func (c TagsController) AddTag(tag_json string) string {
 }
 
 //admin
-func (c TagsController) UpdateTag(tag_json string) string {
+func (c Tag) UpdateTag(tag_json string) string {
 	tags_dao := dao.Tag{DB:config.Global.DB}
 	updated_tag := models.Tag{}
 	if err := json.Unmarshal([]byte(tag_json), &updated_tag); err != nil {
@@ -97,7 +97,7 @@ func (c TagsController) UpdateTag(tag_json string) string {
 }
 
 //admin
-func (c TagsController) DeleteTag(tag_id int) string {
+func (c Tag) DeleteTag(tag_id int) string {
 	tags_dao := dao.Tag{DB:config.Global.DB}
 	tag := models.Tag{ID:tag_id}
 	if err := tags_dao.DeleteTag(&tag).Error; err != nil {

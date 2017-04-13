@@ -3,7 +3,7 @@ package tests
 import (
 	// "encoding/json"
 	"gopkg.in/pg.v5"
-	"log"
+	log "github.com/Sirupsen/logrus"
 	"fmt"
 	"github.com/tendresse/go-getting-started/app/models"
 	"github.com/tendresse/go-getting-started/app/dao"
@@ -26,7 +26,7 @@ type GlobalStruct struct{
 var Global GlobalStruct
 
 func init() {
-	initDB()
+	//initDB()
 	//loadDB()
 	//testTag()
 	//testAchievement()
@@ -45,11 +45,13 @@ func initDB() {
 		Addr: "127.0.0.1:32768",
 	})
 	if err := executeQueries(delete_schema); err != nil {
+		fmt.Println("bug ?")
 		log.Fatalln(err)
 	}
 	fmt.Println("deleted schema")
 
 	if err := executeQueries(create_schema); err != nil {
+		fmt.Println("bug ?")
 		log.Fatalln(err)
 	}
 	fmt.Println("created schema")
@@ -623,7 +625,7 @@ func testUser(){
 }
 
 func testTendresse(){
-	tendresses_dao := dao.Tendresse{DB:Global.DB}
+	tendresses_dao := dao.Tendresse{DB : Global.DB}
 
 	tendresse := models.Tendresse{ID:1}
 	if err := tendresses_dao.GetTendresse(&tendresse); err != nil {

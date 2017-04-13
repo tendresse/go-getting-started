@@ -2,6 +2,7 @@ package dao
 
 import (
 	"github.com/tendresse/go-getting-started/app/models"
+
 	"gopkg.in/pg.v5"
 )
 

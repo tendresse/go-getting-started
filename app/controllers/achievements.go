@@ -14,11 +14,11 @@ import (
 )
 
 
-type AchievementsController struct {
+type Achievement struct {
 }
 
 // wrap with admin rights
-func (c AchievementsController) GetAchievements() string {
+func (c Achievement) GetAchievements() string {
 	achievements_dao := dao.Achievement{DB:config.Global.DB}
 	achievements := []models.Achievement{}
 	if err := achievements_dao.GetAllAchievements(&achievements); err != nil {
@@ -34,7 +34,7 @@ func (c AchievementsController) GetAchievements() string {
 }
 
 // wrap with admin rights
-func (c AchievementsController) GetAchievement(achievement_id int) string {
+func (c Achievement) GetAchievement(achievement_id int) string {
 	achievements_dao := dao.Achievement{DB:config.Global.DB}
 	achievement := models.Achievement{ID:achievement_id}
 
@@ -51,7 +51,7 @@ func (c AchievementsController) GetAchievement(achievement_id int) string {
 }
 
 // wrap with admin rights
-func (c AchievementsController) CreateAchievement(achievement_json string) string {
+func (c Achievement) CreateAchievement(achievement_json string) string {
 	achievements_dao := dao.Achievement{DB:config.Global.DB}
 	tags_dao         := dao.Tag{DB:config.Global.DB}
 
@@ -75,7 +75,7 @@ func (c AchievementsController) CreateAchievement(achievement_json string) strin
 }
 
 // wrap with admin rights
-func (c AchievementsController) UpdateAchievement(achievement_json string) string {
+func (c Achievement) UpdateAchievement(achievement_json string) string {
 	achievements_dao    := dao.Achievement{DB:config.Global.DB}
 	tags_dao            := dao.Tag{DB:config.Global.DB}
 
@@ -114,7 +114,7 @@ func (c AchievementsController) UpdateAchievement(achievement_json string) strin
 }
 
 // wrap with admin rights
-func (c AchievementsController) DeleteAchievement(achievement_id int) string {
+func (c Achievement) DeleteAchievement(achievement_id int) string {
 	achievements_dao := dao.Achievement{DB:config.Global.DB}
 	if err := achievements_dao.DeleteAchievement(&models.Achievement{ID:achievement_id}).Error; err != nil {
 		log.Error(err)

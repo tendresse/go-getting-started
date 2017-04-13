@@ -18,7 +18,7 @@ import (
 )
 
 
-type BlogsController struct {
+type Blog struct {
 }
 
 
@@ -31,36 +31,35 @@ func (e *errorString) Error() string {
 
 var http_client = &http.Client{Timeout: 10 * time.Second}
 
-func fetchTumblr(url string) (models.Tumblr,error) {
+func fetchTumblr(url string, tumblr *models.Tumblr) (error) {
 	resp, err := http_client.Get(url)
 	defer resp.Body.Close()
 	if err != nil {
 		log.Error(err)
-		return nil, err
+		return err
 	}
 
 	contents, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Error(err)
-		return nil, err
+		return err
 	}
 
-	tumblr := models.Tumblr{}
 	err = json.Unmarshal(contents, &tumblr)
 	if err != nil {
 		log.Error(err)
-		return nil, err
+		return err
 	}
 
 	if tumblr.Meta.Status != 200 {
 		log.Error(err)
-		return nil, &errorString{`{"success":false, "error":"API request is invalid"}`}
+		return &errorString{`{"success":false, "error":"API request is invalid"}`}
 	}
-	return tumblr, nil
+	return nil
 }
 
 // wrap with admin rights
-func (c BlogsController) GetBlogs() string {
+func (c Blog) GetBlogs() string {
 	blogs_dao := dao.Blog{DB : config.Global.DB}
 	blogs := []models.Blog{}
 	if err := blogs_dao.GetAllBlogs(&blogs); err != nil {
@@ -76,7 +75,7 @@ func (c BlogsController) GetBlogs() string {
 }
 
 // wrap with admin rights
-func (c BlogsController) GetBlog(blog_id int) string {
+func (c Blog) GetBlog(blog_id int) string {
 	blogs_dao := dao.Blog{DB : config.Global.DB}
 	blog := models.Blog{ID:blog_id}
 	if err := blogs_dao.GetFullBlog(&blog); err != nil {
@@ -92,7 +91,7 @@ func (c BlogsController) GetBlog(blog_id int) string {
 }
 
 // wrap with admin rights
-func (c BlogsController) AddBlog(blog_url string) string {
+func (c Blog) AddBlog(blog_url string) string {
 	blogs_dao := dao.Blog{DB : config.Global.DB}
 	tags_dao  := dao.Tag{DB:config.Global.DB}
 	gifs_dao  := dao.Gif{DB:config.Global.DB}
@@ -107,8 +106,8 @@ func (c BlogsController) AddBlog(blog_url string) string {
 		return `{"success":false, "error":"error while creating the blog"}`
 	}
 	blog_url = strings.Join([]string{"https://api.tumblr.com/v2/blog/",blog_url,"/posts/photo?api_key=",config.Global.TumblrAPIKey},"")
-	tumblr,err := fetchTumblr(blog_url)
-	if err != nil{
+	tumblr := models.Tumblr{}
+	if err := fetchTumblr(blog_url, &tumblr); err != nil{
 		log.Error(err)
 		return `{"success":false, "error":"error while fetching the Tumblr"}`
 	}
@@ -117,14 +116,13 @@ func (c BlogsController) AddBlog(blog_url string) string {
 
 	for i := 0; i < tumblr.Response.Blog.TotalPosts; i+=20 {
 		posts_url := strings.Join([]string{blog_url,strconv.Itoa(i)},"")
-		
-		tumblr_posts, err := fetchTumblr(posts_url)
-		if err != nil {
+		tumblr = models.Tumblr{}
+		if err := fetchTumblr(posts_url, &tumblr); err != nil {
 			log.Error(err)
 			return `{"success":false, "error":"error while getting contents"}`
 		}
 
-		for _,post := range tumblr_posts.Response.Posts {
+		for _,post := range tumblr.Response.Posts {
 			if strings.Compare(post.Type,"photo") != 0 {
 				continue
 			}
@@ -163,7 +161,7 @@ func (c BlogsController) AddBlog(blog_url string) string {
 }
 
 //admin
-func (c BlogsController) DeleteBlog(blog_id int) string {
+func (c Blog) DeleteBlog(blog_id int) string {
 	blogs_dao := dao.Blog{DB : config.Global.DB}
 	if err := blogs_dao.DeleteBlog(&models.Blog{ID:blog_id}); err != nil {
 		log.Error(err)

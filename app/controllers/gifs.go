@@ -13,10 +13,10 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
-type GifsController struct {
+type Gif struct {
 }
 
-func (c GifsController) RandomGif() string {
+func (c Gif) RandomGif() string {
 	gifs_dao := dao.Gif{DB:config.Global.DB}
 	gif := models.Gif{}
 	if err := gifs_dao.GetRandomGif(&gif); err != nil {
@@ -32,7 +32,7 @@ func (c GifsController) RandomGif() string {
 }
 
 //admin
-func (c GifsController) GetGif(gif_id int) string {
+func (c Gif) GetGif(gif_id int) string {
 	gifs_dao := dao.Gif{DB:config.Global.DB}
 	gif := models.Gif{ID:gif_id}
 	if err := gifs_dao.GetFullGif(&gif); err != nil {
@@ -48,10 +48,10 @@ func (c GifsController) GetGif(gif_id int) string {
 }
 
 //admin
-func (c GifsController) GetGifs() string {
+func (c Gif) GetGifs() string {
 	gifs_dao := dao.Gif{DB:config.Global.DB}
-	gifs, err := gifs_dao.GetAllGifs()
-	if err != nil {
+	gifs := []models.Gif{}
+	if err := gifs_dao.GetAllGifs(&gifs); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"gif not found"}`
 	}
@@ -64,7 +64,7 @@ func (c GifsController) GetGifs() string {
 }
 
 //admin
-func (c GifsController) SearchGifsByTags(tags_json string) string {
+func (c Gif) SearchGifsByTags(tags_json string) string {
 	// TODO : test SearchGifsByTags
 	type TagsJSON struct {
 		Tags []models.Tag `json:"tags,omitempty"`
@@ -112,7 +112,7 @@ func (c GifsController) SearchGifsByTags(tags_json string) string {
 }
 
 //admin
-func (c GifsController) AddGif(gif_json string) string {
+func (c Gif) AddGif(gif_json string) string {
 	gifs_dao := dao.Gif{DB:config.Global.DB}
 
 	gif := models.Gif{}
@@ -143,7 +143,7 @@ func (c GifsController) AddGif(gif_json string) string {
 }
 
 //admin
-func (c GifsController) UpdateGif(gif_json string) string {
+func (c Gif) UpdateGif(gif_json string) string {
 	gifs_dao := dao.Gif{DB:config.Global.DB}
 	tags_dao := dao.Tag{DB:config.Global.DB}
 
@@ -185,7 +185,7 @@ func (c GifsController) UpdateGif(gif_json string) string {
 }
 
 //admin
-func (c GifsController) DeleteGif(gif_id int) string {
+func (c Gif) DeleteGif(gif_id int) string {
 	gifs_dao := dao.Gif{DB : config.Global.DB}
 	if err := gifs_dao.DeleteGif(&models.Gif{ID:gif_id}); err != nil {
 		log.Error(err)

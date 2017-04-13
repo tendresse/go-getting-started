@@ -1,10 +1,11 @@
 package dao
 
 import (
-	// "encoding/json"
-	"github.com/tendresse/go-getting-started/app/models"
-	"gopkg.in/pg.v5"
 	"fmt"
+
+	"github.com/tendresse/go-getting-started/app/models"
+
+	"gopkg.in/pg.v5"
 )
 
 type Tendresse struct {
@@ -22,6 +23,10 @@ func (c Tendresse) CreateTendresses(tendresses []*models.Tendresse) error {
 		}
 	}
 	return nil
+}
+
+func (c Tendresse) UpdateTendresse(tendresse *models.Tendresse) error {
+	return c.DB.Update(&tendresse)
 }
 
 
@@ -66,10 +71,8 @@ func (c Tendresse) GetPendingTendresses(user *models.User) ([]models.Tendresse,e
 	return tendresses,nil
 }
 
-func (c Tendresse) CountSenderTendresses(count *int, sender_id int) error {
-	var err error
-	*count,err = c.DB.Model(&models.Tendresse{}).Where("sender_id = ?",sender_id).Count()
-	return err
+func (c Tendresse) CountSenderTendresses(sender_id int) (int,error) {
+	return c.DB.Model(&models.Tendresse{}).Where("sender_id = ?",sender_id).Count()
 }
 
 
@@ -84,3 +87,5 @@ func (c Tendresse) DeleteTendresses(tendresses []*models.Tendresse) error {
 	}
 	return nil
 }
+
+
