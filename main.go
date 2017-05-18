@@ -111,17 +111,21 @@ func main() {
 		return controllers.Gif{}.RandomGif()
 	})
 
-
 	serveMux := http.NewServeMux()
 	serveMux.Handle("/", http.FileServer(http.Dir("./public")))
 	serveMux.Handle("/socket.io/", server)
 	static := http.StripPrefix("/static", http.FileServer(http.Dir("static/")))
 	serveMux.Handle("/static/", static)
-	log.Println("Starting server on port 3000 ...")
-	err := http.ListenAndServe(":3000", serveMux)
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Error("env variable PORT is not set")
+		port = "3000"
+	}
+	err := http.ListenAndServe(":"+port, serveMux)
 	if err != nil {
 		log.Panic("ListenAndServe: " + err.Error())
 	}
+	log.Println("Starting server on port "+port+" ...")
 	/**
 	* DEV MODE
 	*  - enable CORS
