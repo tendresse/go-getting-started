@@ -12,7 +12,6 @@ import (
 	"gopkg.in/pg.v5"
 	"github.com/graarh/golang-socketio"
 	"github.com/graarh/golang-socketio/transport"
-	"github.com/rs/cors"
 )
 
 func main() {
@@ -126,16 +125,6 @@ func main() {
 		log.Panic("ListenAndServe: " + err.Error())
 	}
 	log.Println("Starting server on port "+port+" ...")
-	/**
-	* DEV MODE
-	*  - enable CORS
-	*/
-	handler := cors.Default().Handler(serveMux)
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},
-		AllowCredentials: true,
-	})
-	handler = c.Handler(handler)
 }
 
 func initEnv() {

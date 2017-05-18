@@ -35,26 +35,12 @@
 			"Rev": "1c35d901db3da928c72a72d8458480cc9ade058f"
 		},
 		{
-			"ImportPath": "github.com/rs/cors",
-			"Comment": "v1.0",
-			"Rev": "a62a804a8a009876ca59105f7899938a1349f4b3"
-		},
-		{
-			"ImportPath": "github.com/rs/xhandler",
-			"Comment": "v1.0-1-ged27b6f",
-			"Rev": "ed27b6fd65218132ee50cd95f38474a3d8a2cd12"
-		},
-		{
 			"ImportPath": "golang.org/x/crypto/bcrypt",
 			"Rev": "b8a2a83acfe6e6770b75de42d5ff4c67596675c0"
 		},
 		{
 			"ImportPath": "golang.org/x/crypto/blowfish",
 			"Rev": "b8a2a83acfe6e6770b75de42d5ff4c67596675c0"
-		},
-		{
-			"ImportPath": "golang.org/x/net/context",
-			"Rev": "f2499483f923065a842d38eb4c7f1927e6fc6e6d"
 		},
 		{
 			"ImportPath": "golang.org/x/sys/unix",
