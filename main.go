@@ -8,20 +8,11 @@ import (
 	"github.com/tendresse/go-getting-started/app/config"
 	"github.com/tendresse/go-getting-started/app/controllers"
 
-	"github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 	"gopkg.in/pg.v5"
-	"golang.org/x/net/websocket"
 	"github.com/graarh/golang-socketio"
-	"github.com/garyburd/redigo/redis"
-	"io"
-	"time"
-)
-
-var (
-	waitTimeout = time.Minute * 10
-	log         = logrus.WithField("cmd", "go-websocket-chat-demo")
-	rr          redisReceiver
-	rw          redisWriter
+	"github.com/graarh/golang-socketio/transport"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -30,12 +21,14 @@ func main() {
 	defer config.Global.DB.Close()
 
 	var current_user_id int
+	server := gosocketio.NewServer(transport.GetDefaultWebsocketTransport())
 	server.On(gosocketio.OnConnection, func(c *gosocketio.Channel) {
 		current_user_id = 0
 		c.Emit("ready","websocket is ready")
 		log.Println("New client connected, client id is ", c.Id())
 	})
 	server.On(gosocketio.OnError, func(c *gosocketio.Channel) {
+		current_user_id = 0
 		log.Println("Error occurs")
 	})
 	server.On(gosocketio.OnDisconnection, func(c *gosocketio.Channel) {
@@ -118,62 +111,27 @@ func main() {
 		return controllers.Gif{}.RandomGif()
 	})
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		log.WithField("PORT", port).Fatal("$PORT must be set")
-	}
-
-	redisURL := os.Getenv("REDIS_URL")
-	redisPool, err := redis.NewRedisPoolFromURL(redisURL)
-	if err != nil {
-		log.WithField("url", redisURL).Fatal("Unable to create Redis pool")
-	}
-
-	rr = newRedisReceiver(redisPool)
-	rw = newRedisWriter(redisPool)
-
-	go func() {
-		for {
-			waited, err := redis.WaitForAvailability(redisURL, waitTimeout, rr.wait)
-			if !waited || err != nil {
-				log.WithFields(logrus.Fields{"waitTimeout": waitTimeout, "err": err}).Fatal("Redis not available by timeout!")
-			}
-			rr.broadcast(availableMessage)
-			err = rr.run()
-			if err == nil {
-				break
-			}
-			log.Error(err)
-		}
-	}()
-
-	go func() {
-		for {
-			waited, err := redis.WaitForAvailability(redisURL, waitTimeout, nil)
-			if !waited || err != nil {
-				log.WithFields(logrus.Fields{"waitTimeout": waitTimeout, "err": err}).Fatal("Redis not available by timeout!")
-			}
-			err = rw.run()
-			if err == nil {
-				break
-			}
-			log.Error(err)
-		}
-	}()
-
 
 	serveMux := http.NewServeMux()
 	serveMux.Handle("/", http.FileServer(http.Dir("./public")))
-	serveMux.HandleFunc("/ws", handleWebsocket)
+	serveMux.Handle("/socket.io/", server)
 	static := http.StripPrefix("/static", http.FileServer(http.Dir("static/")))
 	serveMux.Handle("/static/", static)
-	serveMux.Handle("/socket", websocket.Handler(UserSocket))
-	serveMux.Handle("/admin", websocket.Handler(AdminSocket))
 	log.Println("Starting server on port 3000 ...")
-	err := http.ListenAndServe(":"+port, serveMux)
+	err := http.ListenAndServe(":3000", serveMux)
 	if err != nil {
 		log.Panic("ListenAndServe: " + err.Error())
 	}
+	/**
+	* DEV MODE
+	*  - enable CORS
+	*/
+	handler := cors.Default().Handler(serveMux)
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+	})
+	handler = c.Handler(handler)
 }
 
 func initEnv() {
@@ -212,10 +170,3 @@ func initDB() {
 	db.LoadDB()
 }
 
-func UserSocket(ws *websocket.Conn) {
-	io.Copy(ws, ws)
-}
-
-func AdminSocket(ws *websocket.Conn) {
-	io.Copy(ws, ws)
-}

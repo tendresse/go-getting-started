@@ -1,0 +1,97 @@
+{
+	"ImportPath": "github.com/tendresse/go-getting-started",
+	"GoVersion": "go1.8",
+	"GodepVersion": "v79",
+	"Packages": [
+		"."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.11.0-35-g61e43dc",
+			"Rev": "61e43dc76f7ee59a82bdf3d71033dc12bea4c77d"
+		},
+		{
+			"ImportPath": "github.com/dgrijalva/jwt-go",
+			"Comment": "v3.0.0-10-g9ed569b",
+			"Rev": "9ed569b5d1ac936e6494082958d63a6aa4fff99a"
+		},
+		{
+			"ImportPath": "github.com/gorilla/websocket",
+			"Comment": "v1.0.0-39-ge8f0f8a",
+			"Rev": "e8f0f8aaa98dfb6586cbdf2978d511e3199a960a"
+		},
+		{
+			"ImportPath": "github.com/graarh/golang-socketio",
+			"Rev": "fe537904e1a199161f63431ec39ea710c7f074c9"
+		},
+		{
+			"ImportPath": "github.com/graarh/golang-socketio/protocol",
+			"Rev": "fe537904e1a199161f63431ec39ea710c7f074c9"
+		},
+		{
+			"ImportPath": "github.com/graarh/golang-socketio/transport",
+			"Rev": "fe537904e1a199161f63431ec39ea710c7f074c9"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/inflection",
+			"Rev": "1c35d901db3da928c72a72d8458480cc9ade058f"
+		},
+		{
+			"ImportPath": "github.com/rs/cors",
+			"Comment": "v1.0",
+			"Rev": "a62a804a8a009876ca59105f7899938a1349f4b3"
+		},
+		{
+			"ImportPath": "github.com/rs/xhandler",
+			"Comment": "v1.0-1-ged27b6f",
+			"Rev": "ed27b6fd65218132ee50cd95f38474a3d8a2cd12"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/bcrypt",
+			"Rev": "b8a2a83acfe6e6770b75de42d5ff4c67596675c0"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/blowfish",
+			"Rev": "b8a2a83acfe6e6770b75de42d5ff4c67596675c0"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "f2499483f923065a842d38eb4c7f1927e6fc6e6d"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "d75a52659825e75fff6158388dddc6a5b04f9ba5"
+		},
+		{
+			"ImportPath": "gopkg.in/pg.v5",
+			"Comment": "v5.2.8",
+			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
+		},
+		{
+			"ImportPath": "gopkg.in/pg.v5/internal",
+			"Comment": "v5.2.8",
+			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
+		},
+		{
+			"ImportPath": "gopkg.in/pg.v5/internal/parser",
+			"Comment": "v5.2.8",
+			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
+		},
+		{
+			"ImportPath": "gopkg.in/pg.v5/internal/pool",
+			"Comment": "v5.2.8",
+			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
+		},
+		{
+			"ImportPath": "gopkg.in/pg.v5/orm",
+			"Comment": "v5.2.8",
+			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
+		},
+		{
+			"ImportPath": "gopkg.in/pg.v5/types",
+			"Comment": "v5.2.8",
+			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
+		}
+	]
+}
