@@ -4,3 +4,4 @@
 vendor/*
 !vendor/vendor.json
 **/**.DS_Store
+go-getting-started
