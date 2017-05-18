@@ -14,25 +14,25 @@
   </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
 <script>
-    // Create SocketIO instance, connect
-    var socket = io('wss://agile-ravine-71962.herokuapp.com', {transports: ['websocket']});
-    //var socket = io('https://agile-ravine-71962.herokuapp.com');
+    var socket = io('ws://localhost:3000', {transports: ['websocket']});
 
-    // Add a connect listener
-    socket.on('connect',function() {
-      console.log('Client has connected to the server!');
+    // listen for messages
+    socket.on('message', function(message) {
+
+        console.log('new message');
+        console.log(message);
     });
-    // Add a connect listener
-    socket.on('time',function(data) {
-      console.log('Received a message from the server!',data);
-    });
-    // Add a disconnect listener
-    socket.on('disconnect',function() {
-      console.log('The client has disconnected!');
-    });
-    // Add a connect listener
-    socket.on('ready',function(data) {
-      console.log('ready : ',data);
+
+    socket.on('connect', function () {
+
+        console.log('socket connected');
+
+        //send something
+        socket.emit('send', {name: "my name", message: "hello"}, function(result) {
+
+            console.log('sended successfully');
+            console.log(result);
+        });
     });
 
     document.getElementById('form').onsubmit=function(ev) {
