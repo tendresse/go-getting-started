@@ -141,7 +141,7 @@ func initEnv() {
 	}
 	config.Global.SecretKey = secret_key
 
-	database_uri := os.Getenv("DATABASE_URI")
+	database_uri := os.Getenv("DATABASE_URL")
 	if database_uri == "" {
 		log.Error("env variable database_uri is not set")
 		// testing
