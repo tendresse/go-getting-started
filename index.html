@@ -1,17 +1,21 @@
 <head>
-	<meta charset="utf-8">
-	<title>socketio</title>
+  <meta charset="utf-8">
+  <title>socketio</title>
 </head>
 <body>
-	<h1>socketio</h1>
-  <input id="random" type="button" value="random_gif">
-  <img src="" id='gif' />
-</body>
-<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <h1>socketio</h1>
+  <form id="form">
+    <input id="command" type="text">
+    <input id="argument" type="text">
+    <input type="submit">
+  </form>
+  <br>
+  <div id="return"></div>
+  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.1/socket.io.js"></script>
 <script>
     // Create SocketIO instance, connect
-
-    var socket = io('http://127.0.0.1:5000');
+    var socket = io('https://agile-ravine-71962.herokuapp.com');
 
     // Add a connect listener
     socket.on('connect',function() {
@@ -25,14 +29,22 @@
     socket.on('disconnect',function() {
       console.log('The client has disconnected!');
     });
+    // Add a connect listener
+    socket.on('ready',function(data) {
+      console.log('ready : ',data);
+    });
 
-    document.getElementById("random").onclick = function() { 
-                                                 socket.emit('random', 'Salut serveur, ça va ?', function(data){
-                                                  console.log(JSON.parse(data));
-                                                 });
-                                            };
-    // Sends a message to the server via sockets
-    function sendMessageToServer(message) {
-      socket.send(message);
-    };
+    document.getElementById('form').onsubmit=function(ev) {
+      ev.preventDefault();
+      socket.emit(document.getElementById('command').value,document.getElementById('argument').value, function(data){
+        console.log(data);
+        var theDiv = document.getElementById("return");
+        var para = document.createElement("p");
+        var node = document.createTextNode(data);
+        para.appendChild(node);
+        theDiv.appendChild(para);
+      });
+      return false;
+    }
+
 </script>
