@@ -2,28 +2,28 @@ package models
 
 import (
 	// "encoding/json"
-	_"gopkg.in/pg.v5"
+	_"github.com/go-pg/pg"
 )
 
 type GifsTags struct {
-	TagID		int `sql:",pk"`
-	GifID		int `sql:",pk"`
+	TagId int `sql:",pk"`
+	GifId int `sql:",pk"`
 }
 
 
 type UsersAchievements struct {
-	AchievementID	int `sql:",pk"`
-	UserID 		int `sql:",pk"`
-	Score		int
-	Unlocked	bool
+	AchievementId int `sql:",pk"`
+	UserId        int `sql:",pk"`
+	Score         int
+	Unlocked      bool
 }
 
 type UsersFriends struct {
-	UserID 		int `sql:",pk"`
-	FriendID	int `sql:",pk"`
+	UserId   int `sql:",pk"`
+	FriendId int `sql:",pk"`
 }
 
 type UsersRoles struct {
-	RoleID		int `sql:",pk"`
-	UserID		int `sql:",pk"`
+	RoleId int `sql:",pk"`
+	UserId int `sql:",pk"`
 }

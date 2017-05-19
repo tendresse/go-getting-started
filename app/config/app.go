@@ -1,7 +1,7 @@
 package config
 
 import (
-	"gopkg.in/pg.v5"
+	"github.com/go-pg/pg"
 )
 
 type GlobalStruct struct {

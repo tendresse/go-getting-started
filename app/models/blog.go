@@ -2,13 +2,13 @@ package models
 
 import (
 	// "encoding/json"
-	_"gopkg.in/pg.v5"
+	_"github.com/go-pg/pg"
 )
 
 type Blog struct{
-	ID 		int 		`json:"id,omitempty"`
-	Title        	string		`json:"title,omitempty"`
-	Url         	string 		`json:"url,omitempty"`
-	Gifs 		[]*Gif		`json:"gifs,omitempty"`
+	Id    int 	`json:"id,omitempty"`
+	Title string	`json:"title,omitempty"`
+	Url   string 	`json:"url,omitempty"`
+	Gifs  []*Gif	`json:"gifs,omitempty"`
 }
 

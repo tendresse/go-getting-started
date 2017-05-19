@@ -2,20 +2,16 @@ package dao
 
 import (
 	// "encoding/json"
-
+	"github.com/tendresse/go-getting-started/app/config"
 	"github.com/tendresse/go-getting-started/app/models"
-
-	"gopkg.in/pg.v5"
 )
 
 
-type Achievement struct{
-	DB 	*pg.DB
-}
+type Achievement struct{}
 
 
 func (c Achievement) CreateAchievement(achievement *models.Achievement) error {
-	return c.DB.Insert(achievement)
+	return config.Global.DB.Insert(achievement)
 }
 
 func (c Achievement) CreateAchievements(achievements []*models.Achievement) error {
@@ -28,46 +24,46 @@ func (c Achievement) CreateAchievements(achievements []*models.Achievement) erro
 }
 
 func (c Achievement) UpdateAchievement(achievement *models.Achievement) error {
-	return c.DB.Update(achievement)
+	return config.Global.DB.Update(achievement)
 }
 
 
 func (c Achievement) GetAchievement(achievement *models.Achievement) error {
-	return c.DB.Select(&achievement)
+	return config.Global.DB.Select(&achievement)
 }
 func (c Achievement) GetAchievements(achievements []*models.Achievement) error {
-	return c.DB.Model(&achievements).Select()
+	return config.Global.DB.Model(&achievements).Select()
 }
 
 
 func (c Achievement) GetAllAchievements(achievements *[]models.Achievement) error {
-	count, err := c.DB.Model(&models.Achievement{}).Count()
+	count, err := config.Global.DB.Model(&models.Achievement{}).Count()
 	if err != nil {
 		return err
 	}
-	return c.DB.Model(&achievements).Limit(count).Select()
+	return config.Global.DB.Model(&achievements).Limit(count).Select()
 }
 
 func (c Achievement) GetFullAchievement(achievement *models.Achievement) error {
-	return c.DB.Model(&achievement).Column("achievement.*", "Tag").First()
+	return config.Global.DB.Model(&achievement).Column("achievement.*", "Tag").Where("id = ?", achievement.Id).First()
 }
 func (c Achievement) GetFullAchievements(achievements []*models.Achievement) error {
-	return c.DB.Model(&achievements).Column("achievement.*", "Tag").Select()
+	return config.Global.DB.Model(&achievements).Column("achievement.*", "Tag").Select()
 }
 
 
 func (c Achievement) GetAchievementByTitle(title string, achievement *models.Achievement) error {
-	return c.DB.Model(&achievement).Where("title = ?",title).Select()
+	return config.Global.DB.Model(&achievement).Where("title = ?",title).Select()
 }
 
 
 func (c Achievement) GetOrCreateAchievement(achievement *models.Achievement) error {
-	return c.DB.Select(&achievement)
+	return config.Global.DB.Select(&achievement)
 }
 
 
 func (c Achievement) DeleteAchievement(achievement *models.Achievement) error {
-	return c.DB.Delete(&achievement)
+	return config.Global.DB.Delete(&achievement)
 }
 func (c Achievement) DeleteAchievements(achievements []*models.Achievement) error {
 	for _,achievement := range achievements {
@@ -79,5 +75,5 @@ func (c Achievement) DeleteAchievements(achievements []*models.Achievement) erro
 }
 
 func (c Achievement) GetSenderAchievementsWithCondition(achievements *[]models.Achievement, condition int) error {
-	return c.DB.Model(achievements).Where("type_of = ?","sender").Where("condition > ?",condition).Select()
+	return config.Global.DB.Model(achievements).Where("type_of = ?","sender").Where("condition > ?",condition).Select()
 }

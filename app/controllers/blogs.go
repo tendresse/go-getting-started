@@ -60,7 +60,7 @@ func fetchTumblr(url string, tumblr *models.Tumblr) (error) {
 
 // wrap with admin rights
 func (c Blog) GetBlogs() string {
-	blogs_dao := dao.Blog{DB : config.Global.DB}
+	blogs_dao := dao.Blog{}
 	blogs := []models.Blog{}
 	if err := blogs_dao.GetAllBlogs(&blogs); err != nil {
 		log.Error(err)
@@ -76,8 +76,8 @@ func (c Blog) GetBlogs() string {
 
 // wrap with admin rights
 func (c Blog) GetBlog(blog_id int) string {
-	blogs_dao := dao.Blog{DB : config.Global.DB}
-	blog := models.Blog{ID:blog_id}
+	blogs_dao := dao.Blog{}
+	blog := models.Blog{Id: blog_id}
 	if err := blogs_dao.GetFullBlog(&blog); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"blog not found"}`
@@ -92,9 +92,9 @@ func (c Blog) GetBlog(blog_id int) string {
 
 // wrap with admin rights
 func (c Blog) AddBlog(blog_url string) string {
-	blogs_dao := dao.Blog{DB : config.Global.DB}
-	tags_dao  := dao.Tag{DB:config.Global.DB}
-	gifs_dao  := dao.Gif{DB:config.Global.DB}
+	blogs_dao := dao.Blog{}
+	tags_dao  := dao.Tag{}
+	gifs_dao  := dao.Gif{}
 	blog      := models.Blog{}
 	if err := blogs_dao.GetBlogByUrl(blog_url, &blog); err != nil {
 		log.Error(err)
@@ -134,7 +134,7 @@ func (c Blog) AddBlog(blog_url string) string {
 			if err := gifs_dao.GetOrCreateGif(&gif); err != nil {
 				log.Error(err)
 			}
-			gif.BlogID = blog.ID
+			gif.BlogId = blog.Id
 			if err := gifs_dao.UpdateGif(&gif); err != nil {
 				log.Error(err)
 			}
@@ -162,8 +162,8 @@ func (c Blog) AddBlog(blog_url string) string {
 
 //admin
 func (c Blog) DeleteBlog(blog_id int) string {
-	blogs_dao := dao.Blog{DB : config.Global.DB}
-	if err := blogs_dao.DeleteBlog(&models.Blog{ID:blog_id}); err != nil {
+	blogs_dao := dao.Blog{}
+	if err := blogs_dao.DeleteBlog(&models.Blog{Id: blog_id}); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error while deleting blog"}`
 	}

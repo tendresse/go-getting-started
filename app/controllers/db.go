@@ -1,13 +1,14 @@
 package controllers
 
 import (
-	// "encoding/json"
-	_ "gopkg.in/pg.v5"
-	log "github.com/Sirupsen/logrus"
 	"fmt"
+	
 	"github.com/tendresse/go-getting-started/app/models"
 	"github.com/tendresse/go-getting-started/app/dao"
 	"github.com/tendresse/go-getting-started/app/config"
+
+	_ "github.com/go-pg/pg"
+	log "github.com/Sirupsen/logrus"
 )
 type DB struct{}
 
@@ -58,7 +59,8 @@ var create_schema = []string{
 		nsfw		boolean	DEFAULT false,
 		username 	text,
 		passhash 	text,
-		premium		boolean DEFAULT false
+		premium		boolean DEFAULT false,
+		token		text	UNIQUE
 	);
 	`,
 	`CREATE TABLE tendresses (
@@ -112,7 +114,7 @@ func (c DB) LoadDB(){
 	}
 	fmt.Println("created schema")
 	// TAGS
-	tags_dao := dao.Tag{DB:config.Global.DB}
+	tags_dao := dao.Tag{}
 
 	tag_milf := models.Tag{
 		Title: "milf",
@@ -133,23 +135,23 @@ func (c DB) LoadDB(){
 	}
 
 	// ACHIEVEMENTS
-	achievements_dao := dao.Achievement{DB:config.Global.DB}
+	achievements_dao := dao.Achievement{}
 
 	achievement_mommy := models.Achievement{
-		Condition: 10,
-		Icon: "ach1.png",
-		TagID: 1,
-		Title: "mommy",
-		TypeOf: "send",
-		XP: 100,
+		Condition: 3,
+		Icon:      "ach1.png",
+		TagId:     1,
+		Title:     "mommy",
+		TypeOf:    "send",
+		XP:        100,
 	}
 	achievement_rider := models.Achievement{
-		Condition: 10,
-		Icon: "ach2.jpg",
-		TagID: 4,
-		Title: "rider cowboy",
-		TypeOf: "receive",
-		XP: 5,
+		Condition: 3,
+		Icon:      "ach2.jpg",
+		TagId:     2,
+		Title:     "rider cowboy",
+		TypeOf:    "receive",
+		XP:        5,
 	}
 	if err := achievements_dao.CreateAchievements([]*models.Achievement{&achievement_mommy, &achievement_rider}); err != nil {
 		fmt.Println("CreateAchievements")
@@ -157,7 +159,7 @@ func (c DB) LoadDB(){
 	}
 
 	// BLOGS
-	blog_dao := dao.Blog{DB : config.Global.DB}
+	blog_dao := dao.Blog{}
 
 	blog_milf := models.Blog{
 		Title: "milf_tumblr",
@@ -173,17 +175,17 @@ func (c DB) LoadDB(){
 	}
 
 	// GIFS
-	gifs_dao := dao.Gif{DB:config.Global.DB}
+	gifs_dao := dao.Gif{}
 
 	gif_milf_pov := models.Gif{
-		BlogID:1,
-		Url:"https://sc1.tumblr.com/gif1",
-		LameScore:0,
+		BlogId:    1,
+		Url:       "https://sc1.tumblr.com/gif1",
+		LameScore: 0,
 	}
 	gif_gays := models.Gif{
-		BlogID:2,
-		Url:"https://sc1.tumblr.com/gif2",
-		LameScore:0,
+		BlogId:    2,
+		Url:       "https://sc1.tumblr.com/gif2",
+		LameScore: 0,
 	}
 	if err := gifs_dao.CreateGifs([]*models.Gif{&gif_milf_pov, &gif_gays}); err != nil {
 		fmt.Println("CreateGifs")
@@ -205,7 +207,7 @@ func (c DB) LoadDB(){
 	}
 
 	// ROLES
-	role_dao := dao.Role{DB:config.Global.DB}
+	role_dao := dao.Role{}
 	role_admin := models.Role{
 		Title:"admin",
 	}
@@ -223,7 +225,7 @@ func (c DB) LoadDB(){
 
 
 	// USERS
-	users_dao := dao.User{DB:config.Global.DB}
+	users_dao := dao.User{}
 	user_alice := models.User{
 		Device: "token_android_123",
 		NSFW: true,
@@ -279,24 +281,24 @@ func (c DB) LoadDB(){
 	}
 
 	// TENDRESSES
-	tendresses_dao := dao.Tendresse{DB:config.Global.DB}
+	tendresses_dao := dao.Tendresse{}
 	alice_bob_1 := models.Tendresse{
-		SenderID: user_alice.ID,
-		ReceiverID: user_bob.ID,
-		GifID: gif_gays.ID,
-		Viewed: false,
+		SenderId:   user_alice.Id,
+		ReceiverId: user_bob.Id,
+		GifId:      gif_gays.Id,
+		Viewed:     false,
 	}
 	alice_bob_2 := models.Tendresse{
-		SenderID: user_alice.ID,
-		ReceiverID: user_bob.ID,
-		GifID: gif_milf_pov.ID,
-		Viewed: true,
+		SenderId:   user_alice.Id,
+		ReceiverId: user_bob.Id,
+		GifId:      gif_milf_pov.Id,
+		Viewed:     true,
 	}
 	bob_alice_1 := models.Tendresse{
-		SenderID: user_bob.ID,
-		ReceiverID: user_alice.ID,
-		GifID: gif_gays.ID,
-		Viewed: false,
+		SenderId:   user_bob.Id,
+		ReceiverId: user_alice.Id,
+		GifId:      gif_gays.Id,
+		Viewed:     false,
 	}
 	if err := tendresses_dao.CreateTendresse(&alice_bob_1); err != nil {
 		fmt.Println("CreateTendresse")

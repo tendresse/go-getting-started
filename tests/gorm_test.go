@@ -2,7 +2,7 @@ package tests
 
 import (
 	// "encoding/json"
-	"gopkg.in/pg.v5"
+	"github.com/go-pg/pg"
 	log "github.com/Sirupsen/logrus"
 	"fmt"
 	"github.com/tendresse/go-getting-started/app/models"
@@ -84,19 +84,19 @@ func loadDB(){
 
 	achievement_mommy := models.Achievement{
 		Condition: 10,
-		Icon: "ach1.png",
-		TagID: 1,
-		Title: "mommy",
-		TypeOf: "send",
-		XP: 100,
+		Icon:      "ach1.png",
+		TagId:     1,
+		Title:     "mommy",
+		TypeOf:    "send",
+		XP:        100,
 	}
 	achievement_rider := models.Achievement{
 		Condition: 10,
-		Icon: "ach2.jpg",
-		TagID: 4,
-		Title: "rider cowboy",
-		TypeOf: "receive",
-		XP: 5,
+		Icon:      "ach2.jpg",
+		TagId:     4,
+		Title:     "rider cowboy",
+		TypeOf:    "receive",
+		XP:        5,
 	}
 	if err := achievements_dao.CreateAchievements([]*models.Achievement{&achievement_mommy, &achievement_rider}); err != nil {
 		fmt.Println("CreateAchievements")
@@ -123,14 +123,14 @@ func loadDB(){
 	gifs_dao := dao.Gif{DB:Global.DB}
 
 	gif_milf_pov := models.Gif{
-		BlogID:1,
-		Url:"https://sc1.tumblr.com/gif1",
-		LameScore:0,
+		BlogId:    1,
+		Url:       "https://sc1.tumblr.com/gif1",
+		LameScore: 0,
 	}
 	gif_gays := models.Gif{
-		BlogID:2,
-		Url:"https://sc1.tumblr.com/gif2",
-		LameScore:0,
+		BlogId:    2,
+		Url:       "https://sc1.tumblr.com/gif2",
+		LameScore: 0,
 	}
 	if err := gifs_dao.CreateGifs([]*models.Gif{&gif_milf_pov, &gif_gays}); err != nil {
 		fmt.Println("CreateGifs")
@@ -228,22 +228,22 @@ func loadDB(){
 	// TENDRESSES
 	tendresses_dao := dao.Tendresse{DB:Global.DB}
 	alice_bob_1 := models.Tendresse{
-		SenderID: user_alice.ID,
-		ReceiverID: user_bob.ID,
-		GifID: gif_gays.ID,
-		Viewed: false,
+		SenderId:   user_alice.Id,
+		ReceiverId: user_bob.Id,
+		GifId:      gif_gays.Id,
+		Viewed:     false,
 	}
 	alice_bob_2 := models.Tendresse{
-		SenderID: user_alice.ID,
-		ReceiverID: user_bob.ID,
-		GifID: gif_milf_pov.ID,
-		Viewed: true,
+		SenderId:   user_alice.Id,
+		ReceiverId: user_bob.Id,
+		GifId:      gif_milf_pov.Id,
+		Viewed:     true,
 	}
 	bob_alice_1 := models.Tendresse{
-		SenderID: user_bob.ID,
-		ReceiverID: user_alice.ID,
-		GifID: gif_gays.ID,
-		Viewed: false,
+		SenderId:   user_bob.Id,
+		ReceiverId: user_alice.Id,
+		GifId:      gif_gays.Id,
+		Viewed:     false,
 	}
 	if err := tendresses_dao.CreateTendresse(&alice_bob_1); err != nil {
 		fmt.Println("CreateTendresse")
@@ -273,7 +273,7 @@ func testTag(){
 	}
 
 	tag_create.Title = "i like trains"
-	gif := models.Gif{ID:1}
+	gif := models.Gif{Id: 1}
 	gifs_dao.GetGif(&gif)
 	tag_create.Gifs = []models.Gif{gif}
 	if err := tags_dao.UpdateTag(&tag_create); err != nil {
@@ -281,13 +281,13 @@ func testTag(){
 		fmt.Println(err)
 	}
 
-	tag := models.Tag{ID:1}
+	tag := models.Tag{Id: 1}
 	if err := tags_dao.GetTag(&tag); err != nil {
 		fmt.Println("GetTag")
 		fmt.Println(err)
 	}
 
-	tag_full := models.Tag{ID:1}
+	tag_full := models.Tag{Id: 1}
 	if err := tags_dao.GetFullTag(&tag_full); err != nil {
 		fmt.Println("GetFullTag")
 		fmt.Println(err)
@@ -299,13 +299,13 @@ func testTag(){
 		fmt.Println(err)
 	}
 
-	tags := []*models.Tag{{ID:1}, {ID:2}}
+	tags := []*models.Tag{{Id: 1}, {Id: 2}}
 	if err := tags_dao.GetTags(tags); err != nil {
 		fmt.Println("GetTags")
 		fmt.Println(err)
 	}
 
-	tags_full := []*models.Tag{{ID:1}, {ID:2}}
+	tags_full := []*models.Tag{{Id: 1}, {Id: 2}}
 	if err := tags_dao.GetFullTags(tags_full); err != nil {
 		fmt.Println("GetFullTags")
 		fmt.Println(err)
@@ -317,11 +317,11 @@ func testAchievement() {
 
 	achievement_create := models.Achievement{
 		Condition: 10,
-		Icon: "ach5.jpg",
-		TagID: 4,
-		Title: "i like dolphin",
-		TypeOf: "receive",
-		XP: 10,
+		Icon:      "ach5.jpg",
+		TagId:     4,
+		Title:     "i like dolphin",
+		TypeOf:    "receive",
+		XP:        10,
 	}
 	if err := achievements_dao.CreateAchievement(&achievement_create); err != nil {
 		fmt.Println("CreateAchievement")
@@ -334,13 +334,13 @@ func testAchievement() {
 		fmt.Println(err)
 	}
 
-	achievement := models.Achievement{ID:1}
+	achievement := models.Achievement{Id: 1}
 	if err := achievements_dao.GetAchievement(&achievement); err != nil {
 		fmt.Println("GetAchievement")
 		fmt.Println(err)
 	}
 
-	achievement_full := models.Achievement{ID:1}
+	achievement_full := models.Achievement{Id: 1}
 	if err := achievements_dao.GetFullAchievement(&achievement_full); err != nil {
 		fmt.Println("GetFullAchievement")
 		fmt.Println(err)
@@ -352,13 +352,13 @@ func testAchievement() {
 		fmt.Println(err)
 	}
 
-	achievements := []*models.Achievement{{ID:1}, {ID:2}}
+	achievements := []*models.Achievement{{Id: 1}, {Id: 2}}
 	if err := achievements_dao.GetAchievements(achievements); err != nil {
 		fmt.Println("GetAchievements")
 		fmt.Println(err)
 	}
 
-	achievements_full := []*models.Achievement{{ID:1}, {ID:2}}
+	achievements_full := []*models.Achievement{{Id: 1}, {Id: 2}}
 	if err := achievements_dao.GetFullAchievements(achievements_full); err != nil {
 		fmt.Println("GetFullAchievements")
 		fmt.Println(err)
@@ -380,14 +380,14 @@ func testBlog(){
 		fmt.Println(err)
 	}
 
-	blog_get := models.Blog{ID:1}
+	blog_get := models.Blog{Id: 1}
 	if err := blog_dao.GetBlog(&blog_get); err != nil {
 		fmt.Println("GetBlog")
 		fmt.Println(err)
 	}
 
 
-	blog_full := models.Blog{ID:2}
+	blog_full := models.Blog{Id: 2}
 	if err := blog_dao.GetFullBlog(&blog_full); err != nil {
 		fmt.Println("GetFullBlog")
 		fmt.Println(err)
@@ -401,13 +401,13 @@ func testBlog(){
 	}
 
 
-	blogs := []*models.Blog{{ID:1}, {ID:2}}
+	blogs := []*models.Blog{{Id: 1}, {Id: 2}}
 	if err := blog_dao.GetBlogs(blogs); err != nil {
 		fmt.Println("GetBlogs")
 		fmt.Println(err)
 	}
 
-	blogs_full := []*models.Blog{{ID:1}, {ID:2}}
+	blogs_full := []*models.Blog{{Id: 1}, {Id: 2}}
 	if err := blog_dao.GetFullBlogs(blogs_full); err != nil {
 		fmt.Println("GetFullBlogs")
 		fmt.Println(err)
@@ -418,9 +418,9 @@ func testGif(){
 	gifs_dao := dao.Gif{DB:Global.DB}
 
 	gif_create := models.Gif{
-		BlogID:2,
-		Url:"https://sc1.tumblr.com/gif14",
-		LameScore:0,
+		BlogId:    2,
+		Url:       "https://sc1.tumblr.com/gif14",
+		LameScore: 0,
 	}
 	if err := gifs_dao.CreateGif(&gif_create); err != nil {
 		fmt.Println("CreateGif")
@@ -433,19 +433,19 @@ func testGif(){
 		fmt.Println(err)
 	}
 
-	gif := models.Gif{ID:1}
+	gif := models.Gif{Id: 1}
 	if err := gifs_dao.GetGif(&gif); err != nil {
 		fmt.Println("GetGif")
 		fmt.Println(err)
 	}
 
-	gif_full := models.Gif{ID:1}
+	gif_full := models.Gif{Id: 1}
 	if err := gifs_dao.GetFullGif(&gif_full); err != nil {
 		fmt.Println("GetFullGif")
 		fmt.Println(err)
 	}
 
-	gifs := []*models.Gif{{ID:1}, {ID:2}}
+	gifs := []*models.Gif{{Id: 1}, {Id: 2}}
 	if err := gifs_dao.GetGifs(gifs); err != nil {
 		fmt.Println("GetGifs")
 		fmt.Println(err)
@@ -457,7 +457,7 @@ func testGif(){
 	}
 	fmt.Println(all_gifs)
 
-	gifs_full := []*models.Gif{{ID:1}, {ID:2}}
+	gifs_full := []*models.Gif{{Id: 1}, {Id: 2}}
 	if err := gifs_dao.GetFullGifs(gifs_full); err != nil {
 		fmt.Println("GetFullGifs")
 		fmt.Println(err)
@@ -491,26 +491,26 @@ func testRole(){
 		fmt.Println(err)
 	}
 
-	role := models.Role{ID:1}
+	role := models.Role{Id: 1}
 	if err := roles_dao.GetRole(&role); err != nil {
 		fmt.Println("GetRole")
 		fmt.Println(err)
 	}
 
-	role_full := models.Role{ID:1}
+	role_full := models.Role{Id: 1}
 	if err := roles_dao.GetFullRole(&role_full); err != nil {
 		fmt.Println("GetFullRole")
 		fmt.Println(err)
 	}
 
 
-	roles := []*models.Role{{ID:1}, {ID:2}}
+	roles := []*models.Role{{Id: 1}, {Id: 2}}
 	if err := roles_dao.GetRoles(roles); err != nil {
 		fmt.Println("GetRoles")
 		fmt.Println(err)
 	}
 
-	roles_full := []*models.Role{{ID:1}, {ID:2}}
+	roles_full := []*models.Role{{Id: 1}, {Id: 2}}
 	if err := roles_dao.GetFullRoles(roles_full); err != nil {
 		fmt.Println("GetFullRoles")
 		fmt.Println(err)
@@ -538,13 +538,13 @@ func testUser(){
 		fmt.Println(err)
 	}
 
-	user := models.User{ID:1}
+	user := models.User{Id: 1}
 	if err := users_dao.GetUser(&user); err != nil {
 		fmt.Println("GetUser")
 		fmt.Println(err)
 	}
 
-	user_full := models.User{ID:1}
+	user_full := models.User{Id: 1}
 	if err := users_dao.GetFullUser(&user_full); err != nil {
 		fmt.Println("GetFullUser")
 		fmt.Println(err)
@@ -559,19 +559,19 @@ func testUser(){
 	}
 
 
-	role := models.Role{ID:3}
+	role := models.Role{Id: 3}
 	if err := users_dao.AddRoleToUser(&role, &user_alice); err != nil {
 		fmt.Println("AddRoleToUser")
 		fmt.Println(err)
 	}
 
-	roles := []*models.Role{{ID:1},{ID:2}}
+	roles := []*models.Role{{Id: 1}, {Id: 2}}
 	if err := users_dao.AddRolesToUser(roles, &user_alice); err != nil {
 		fmt.Println("AddRolesToUser")
 		fmt.Println(err)
 	}
 
-	role = models.Role{ID:3}
+	role = models.Role{Id: 3}
 	if err := users_dao.DeleteRoleFromUser(&role, &user_alice); err != nil {
 		fmt.Println("DeleteRoleFromUser")
 		fmt.Println(err)
@@ -582,13 +582,13 @@ func testUser(){
 		fmt.Println(err)
 	}
 
-	roles = []*models.Role{{ID:1},{ID:2}}
+	roles = []*models.Role{{Id: 1}, {Id: 2}}
 	if err := users_dao.AddRolesToUser(roles, &user_alice); err != nil {
 		fmt.Println("AddRolesToUser")
 		fmt.Println(err)
 	}
 
-	friend := models.User{ID:2}
+	friend := models.User{Id: 2}
 	if err := users_dao.AddFriendToUser(&friend, &user_create); err != nil {
 		fmt.Println("AddFriendToUser")
 		fmt.Println(err)
@@ -598,7 +598,7 @@ func testUser(){
 		fmt.Println(err)
 	}
 
-	friends := []*models.User{{ID:1},{ID:2}}
+	friends := []*models.User{{Id: 1}, {Id: 2}}
 	if err := users_dao.AddFriendsToUser(friends, &user_create); err != nil {
 		fmt.Println("AddFriendsToUser")
 		fmt.Println(err)
@@ -608,7 +608,7 @@ func testUser(){
 		fmt.Println(err)
 	}
 
-	ach := models.Achievement{ID:1}
+	ach := models.Achievement{Id: 1}
 	if err := users_dao.AddAchievementToUser(&ach, &user_create); err != nil {
 		fmt.Println("AddAchievementToUser")
 		fmt.Println(err)
@@ -627,19 +627,19 @@ func testUser(){
 func testTendresse(){
 	tendresses_dao := dao.Tendresse{DB : Global.DB}
 
-	tendresse := models.Tendresse{ID:1}
+	tendresse := models.Tendresse{Id: 1}
 	if err := tendresses_dao.GetTendresse(&tendresse); err != nil {
 		fmt.Println("GetTendresse")
 		fmt.Println(err)
 	}
-	tendresses_full := []*models.Tendresse{{ID:1},{ID:2}}
+	tendresses_full := []*models.Tendresse{{Id: 1}, {Id: 2}}
 	if err := tendresses_dao.GetFullTendresses(tendresses_full); err != nil {
 		fmt.Println("GetFullTendresses")
 		fmt.Println(err)
 	}
 
 	// users_dao := dao.User{DB:Global.DB}
-	alice := models.User{ID:1}
+	alice := models.User{Id: 1}
 	tendresses_alice, err := tendresses_dao.GetPendingTendresses(&alice)
 	if err != nil {
 		fmt.Println("GetPendingTendresses")

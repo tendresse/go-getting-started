@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/tendresse/go-getting-started/app/config"
 	"github.com/tendresse/go-getting-started/app/dao"
 	"github.com/tendresse/go-getting-started/app/models"
 
@@ -19,7 +18,7 @@ type Achievement struct {
 
 // wrap with admin rights
 func (c Achievement) GetAchievements() string {
-	achievements_dao := dao.Achievement{DB:config.Global.DB}
+	achievements_dao := dao.Achievement{}
 	achievements := []models.Achievement{}
 	if err := achievements_dao.GetAllAchievements(&achievements); err != nil {
 		log.Error(err)
@@ -35,8 +34,8 @@ func (c Achievement) GetAchievements() string {
 
 // wrap with admin rights
 func (c Achievement) GetAchievement(achievement_id int) string {
-	achievements_dao := dao.Achievement{DB:config.Global.DB}
-	achievement := models.Achievement{ID:achievement_id}
+	achievements_dao := dao.Achievement{}
+	achievement := models.Achievement{Id: achievement_id}
 
 	if err := achievements_dao.GetFullAchievement(&achievement); err != nil {
 		log.Error(err)
@@ -52,8 +51,8 @@ func (c Achievement) GetAchievement(achievement_id int) string {
 
 // wrap with admin rights
 func (c Achievement) CreateAchievement(achievement_json string) string {
-	achievements_dao := dao.Achievement{DB:config.Global.DB}
-	tags_dao         := dao.Tag{DB:config.Global.DB}
+	achievements_dao := dao.Achievement{}
+	tags_dao         := dao.Tag{}
 
 	achievement      := models.Achievement{}
 	if err := json.Unmarshal([]byte(achievement_json), &achievement); err != nil{
@@ -69,15 +68,15 @@ func (c Achievement) CreateAchievement(achievement_json string) string {
 		log.Error(err)
 		return `{"success":false, "error":"error while fetching Tags"}`
 	}
-	achievement.TagID = tag.ID
+	achievement.TagId = tag.Id
 	achievements_dao.CreateAchievement(&achievement)
-	return strings.Join([]string{`{"success":true, "achievement":` , string(achievement.ID) , "}"} , "")
+	return strings.Join([]string{`{"success":true, "achievement":` , string(achievement.Id) , "}"} , "")
 }
 
 // wrap with admin rights
 func (c Achievement) UpdateAchievement(achievement_json string) string {
-	achievements_dao    := dao.Achievement{DB:config.Global.DB}
-	tags_dao            := dao.Tag{DB:config.Global.DB}
+	achievements_dao    := dao.Achievement{}
+	tags_dao            := dao.Tag{}
 
 	updated_achievement := models.Achievement{}
 	if err := json.Unmarshal([]byte(achievement_json), &updated_achievement); err != nil{
@@ -85,7 +84,7 @@ func (c Achievement) UpdateAchievement(achievement_json string) string {
 		return `{"success":false, "error":"marshal achievement json error"}`
 	}
 
-	achievement := models.Achievement{ID:updated_achievement.ID}
+	achievement := models.Achievement{Id: updated_achievement.Id}
 	if err := achievements_dao.GetAchievement(&achievement); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"achievement not found"}`
@@ -104,19 +103,19 @@ func (c Achievement) UpdateAchievement(achievement_json string) string {
 			log.Error(err)
 			return `{"success":false, "error":"error while fetching Tags"}`
 		}
-		updated_achievement.TagID = tag.ID
+		updated_achievement.TagId = tag.Id
 	}
 	if err := achievements_dao.UpdateAchievement(&updated_achievement); err != nil{
 		log.Error(err)
 		return `{"success":false, "error":"error while updating Achievement"}`
 	}
-	return strings.Join([]string{`{"success":true, "achievement":` , string(achievement.ID) , "}"} , "")
+	return strings.Join([]string{`{"success":true, "achievement":` , string(achievement.Id) , "}"} , "")
 }
 
 // wrap with admin rights
 func (c Achievement) DeleteAchievement(achievement_id int) string {
-	achievements_dao := dao.Achievement{DB:config.Global.DB}
-	if err := achievements_dao.DeleteAchievement(&models.Achievement{ID:achievement_id}).Error; err != nil {
+	achievements_dao := dao.Achievement{}
+	if err := achievements_dao.DeleteAchievement(&models.Achievement{Id: achievement_id}).Error; err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"achievement already deleted"}`
 	}

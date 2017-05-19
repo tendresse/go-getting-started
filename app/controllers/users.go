@@ -4,8 +4,8 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
 	"strings"
+	"time"
 
 	"github.com/tendresse/go-getting-started/app/config"
 	"github.com/tendresse/go-getting-started/app/dao"
@@ -15,11 +15,14 @@ import (
 	"github.com/graarh/golang-socketio"
 	"github.com/dgrijalva/jwt-go"
 	log "github.com/Sirupsen/logrus"
-	"gopkg.in/pg.v5"
 )
 
 type User struct {
-	DB 	*pg.DB
+}
+
+type MyCustomClaims struct {
+	UserID int `json:"user_id"`
+	jwt.StandardClaims
 }
 
 
@@ -28,8 +31,8 @@ func (c User) IsAuthentified(current_user_id int) bool {
 }
 
 func (c User) HasAtLeastOneOfTheseRoles(roles []string, current_user_id *int) bool {
-	userDAO := dao.User{DB:config.Global.DB}
-	user := models.User{ID:*current_user_id}
+	userDAO := dao.User{}
+	user := models.User{Id : *current_user_id}
 	if err := userDAO.GetFullUser(&user); err != nil {
 		return false
 	}
@@ -44,7 +47,7 @@ func (c User) HasAtLeastOneOfTheseRoles(roles []string, current_user_id *int) bo
 }
 
 func (c User) Signup(username string, password string, current_user_id *int, so *gosocketio.Channel) string {
-	userDAO := dao.User{DB:config.Global.DB}
+	userDAO := dao.User{}
 	*current_user_id = 0
 	user := models.User{}
 	username = strings.ToLower(username)
@@ -60,21 +63,25 @@ func (c User) Signup(username string, password string, current_user_id *int, so 
 			log.Error(err)
 			return `{"success":false, "error":"error while creating User"}`
 		}
-		*current_user_id  = user.ID
-		token,err := GenerateToken(user.ID)
+		*current_user_id  = user.Id
+		token,err := GenerateToken(user.Id)
 		if err != nil {
 			log.Error(err)
 			return `{"success":false, "error":"error while creating token"}`
 		}
-		log.Println("user : ",username," with id = ",*current_user_id," created an account.")
+		user.Token = token
+		if err = userDAO.UpdateTokenUser(&user); err != nil {
+			log.Error("error while updating User's token :",token,"with error :",err)
+		}
+		log.Println("user",username,"with id:",*current_user_id,"created an account.")
 		so.Join(user.Username)
-		strings.Join([]string{`{"success":true, "token":`, token, "}"}, "")
+		return strings.Join([]string{`{"success":true, "token":`, token, "}"}, "")
 	}
 	return `{"success":false, "error":"username already taken"}`
 }
 
 func (c User) Login(username string, password string, current_user_id *int, so *gosocketio.Channel) string {
-	userDAO := dao.User{DB:config.Global.DB}
+	userDAO := dao.User{}
 	*current_user_id = 0
 	user := models.User{}
 	username = strings.ToLower(username)
@@ -86,46 +93,66 @@ func (c User) Login(username string, password string, current_user_id *int, so *
 		log.Error(err)
 		return `{"success":false, "error":"username or password incorrect"}`
 	}
-	*current_user_id = user.ID
-	token,err := GenerateToken(user.ID)
+	*current_user_id = user.Id
+	token,err := GenerateToken(user.Id)
 	if err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error while creating token"}`
 	}
-	log.Println("user : ",username," with id = ",*current_user_id," connected.")
+	log.Println("user :",username,"with id =",*current_user_id,"connected.")
 	so.Join(user.Username)
+	user.Token = token
+	if err = userDAO.UpdateTokenUser(&user); err != nil {
+		log.Error("error while updating User's token :",token,"with error :",err)
+	}
+	log.Println("user",username,"with id:",*current_user_id,"just logged in.")
 	return strings.Join([]string{`{"success":true, "token":`, token, "}"}, "")
 }
 
 func (c User) LoginWithToken(user_token string, current_user_id *int, so *gosocketio.Channel) string {
-	userDAO := dao.User{DB:config.Global.DB}
+	userDAO := dao.User{}
 	*current_user_id = 0
-	token, err := jwt.Parse(user_token, func(token *jwt.Token) (interface{}, error) {
-		// Don't forget to validate the alg is what you expect:
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New(token.Header["alg"].(string))
-		}
+
+	the_token, err := jwt.ParseWithClaims(user_token, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(config.Global.SecretKey), nil
 	})
-
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		user := models.User{ID: claims["id"].(int)}
-		if err := userDAO.GetUser(&user); err != nil {
-			log.Error(err)
-			return `{"success":false, "error":"invalid token"}`
+	if the_token.Valid {
+		if claims, ok := the_token.Claims.(*MyCustomClaims); ok {
+			user := models.User{Id: claims.UserID}
+			if err := userDAO.GetUser(&user); err != nil {
+				log.Error(err)
+				return `{"success":false, "error":"token's user not found"}`
+			}
+			// check if token is in user's DB
+			if strings.Compare(user_token,user.Token) != 0 {
+				log.Error("token for user",user.Username,"with Id =",claims.UserID,"is blacklisted :",user_token)
+				return `{"success":false, "error":"invalid token"}`
+			}
+			*current_user_id = user.Id
+			log.Println("user:",user.Username,"with id:",*current_user_id,"juste logged in with token.")
+			so.Join(user.Username)
+			return `{"success":true}`
 		}
-		*current_user_id = user.ID
-		log.Println("user : ",user.Username," with id = ",*current_user_id," connected with token.")
-		so.Join(user.Username)
-		return `{"success":true}`
+	} else if ve, ok := err.(*jwt.ValidationError); ok {
+		if ve.Errors&jwt.ValidationErrorMalformed != 0 {
+			log.Error("That's not even a token")
+		} else if ve.Errors&(jwt.ValidationErrorExpired|jwt.ValidationErrorNotValidYet) != 0 {
+			// Token is either expired or not active yet
+			log.Error("Timing is everything")
+		} else {
+			log.Error("Couldn't handle this token :", err)
+		}
+	} else {
+		log.Error("Couldn't handle this token :", err)
 	}
+	log.Error("claims is not valid or token is not valid")
 	log.Error(err)
 	return `{"success":false, "error":"invalid token"}`
 }
 
 func (c User) GetUser(user_id int) string {
-	userDAO := dao.User{DB:config.Global.DB}
-	user := models.User{ID:user_id}
+	userDAO := dao.User{}
+	user := models.User{Id: user_id}
 	if err := userDAO.GetFullUser(&user); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"unknown user"}`
@@ -139,15 +166,15 @@ func (c User) GetUser(user_id int) string {
 }
 
 func (c User) GetProfile(user_id int) string {
-	userDAO := dao.User{DB:config.Global.DB}
-	user := models.User{ID:user_id}
+	userDAO := dao.User{}
+	user := models.User{Id: user_id}
 	if err := userDAO.GetProfile(&user); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"unknown user"}`
 	}
 	userJSON := models.User{
-		ID: user.ID,
-		Username: user.Username,
+		Id:           user.Id,
+		Username:     user.Username,
 		Achievements: user.Achievements,
 	}
 	b, err := json.Marshal(userJSON)
@@ -159,9 +186,9 @@ func (c User) GetProfile(user_id int) string {
 }
 
 func (c User) GetPendingTendresses(current_user_id *int) string {
-	current_user := models.User{ID:*current_user_id}
-	tendressesDAO := dao.Tendresse{DB:config.Global.DB}
-	tendresses,err := tendressesDAO.GetPendingTendresses(&current_user)
+	current_user := models.User{Id: *current_user_id}
+	tendressesDAO := dao.Tendresse{}
+	tendresses, err := tendressesDAO.GetPendingTendresses(&current_user)
 	if err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error while fetching pending tendresses"}`
@@ -175,10 +202,10 @@ func (c User) GetPendingTendresses(current_user_id *int) string {
 }
 
 func (c User) UpdateDevice(device_token string, current_user_id *int) string {
-	usersDAO := dao.User{DB:config.Global.DB}
-	current_user := models.User{ID:*current_user_id}
+	usersDAO := dao.User{}
+	current_user := models.User{Id: *current_user_id}
 	current_user.Device = device_token
-	if err := usersDAO.UpdateUser(&current_user); err != nil {
+	if err := usersDAO.UpdateDeviceUser(&current_user); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error while updating user"}`
 	}
@@ -186,9 +213,9 @@ func (c User) UpdateDevice(device_token string, current_user_id *int) string {
 }
 
 func (c User) AddFriend(username string, current_user_id *int) string {
-	userDAO := dao.User{DB:config.Global.DB}
+	userDAO := dao.User{}
 	user := models.User{}
-	current_user := models.User{ID:*current_user_id}
+	current_user := models.User{Id: *current_user_id}
 	if err := userDAO.GetFullUser(&current_user); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error while getting current user"}`
@@ -198,16 +225,17 @@ func (c User) AddFriend(username string, current_user_id *int) string {
 		log.Error(err)
 		return `{"success":false, "error":"unknown user"}`
 	}
-	if err := userDAO.AddFriendToUser(&user, &models.User{ID:*current_user_id}); err != nil {
+	if err := userDAO.AddFriendToUser(&user, &models.User{Id: *current_user_id}); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error adding friend"}`
 	}
+	log.Println("user:",current_user.Username,"added user:",username,"as a friend.")
 	return `{"success":true}`
 }
 
 func (c User) DeleteFriend(friend_id int, current_user_id *int) string {
-	userDAO := dao.User{DB:config.Global.DB}
-	if err := userDAO.DeleteFriendFromUser(&models.User{ID:friend_id}, &models.User{ID:*current_user_id}); err != nil {
+	userDAO := dao.User{}
+	if err := userDAO.DeleteFriendFromUser(&models.User{Id: friend_id}, &models.User{Id: *current_user_id}); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error adding friend"}`
 	}
@@ -215,9 +243,9 @@ func (c User) DeleteFriend(friend_id int, current_user_id *int) string {
 }
 
 func (c User) GrantUserRole(user_id int, title string) string {
-	userDAO := dao.User{DB:config.Global.DB}
-	rolesDAO := dao.Role{DB:config.Global.DB}
-	user := models.User{ID:user_id}
+	userDAO := dao.User{}
+	rolesDAO := dao.Role{}
+	user := models.User{Id: user_id}
 	if err := userDAO.GetFullUser(&user); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"unknown user"}`
@@ -241,9 +269,9 @@ func (c User) GrantUserRole(user_id int, title string) string {
 
 
 func (c User) DeleteUserRole(user_id int, title string) string {
-	userDAO := dao.User{DB:config.Global.DB}
-	rolesDAO := dao.Role{DB:config.Global.DB}
-	user := models.User{ID:user_id}
+	userDAO := dao.User{}
+	rolesDAO := dao.Role{}
+	user := models.User{Id: user_id}
 	if err := userDAO.GetFullUser(&user); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"unknown user"}`
@@ -269,10 +297,15 @@ func (c User) DeleteUserRole(user_id int, title string) string {
 	return `{"success":true}`
 }
 
+
 func GenerateToken(user_id int) (string,error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id": user_id,
-	})
+	claims := MyCustomClaims{
+		user_id,
+		jwt.StandardClaims{
+			ExpiresAt: time.Now().AddDate(0, 0, 7 * 2).Unix(),
+		},
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, err := token.SignedString([]byte(config.Global.SecretKey))
 	return tokenString, err
 }

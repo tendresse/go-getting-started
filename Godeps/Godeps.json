@@ -14,6 +14,36 @@
 			"Rev": "9ed569b5d1ac936e6494082958d63a6aa4fff99a"
 		},
 		{
+			"ImportPath": "github.com/go-pg/pg",
+			"Comment": "v6.1.6",
+			"Rev": "60123ff7aaa535e1c26fba9b7ca73569cfeebc5b"
+		},
+		{
+			"ImportPath": "github.com/go-pg/pg/internal",
+			"Comment": "v6.1.6",
+			"Rev": "60123ff7aaa535e1c26fba9b7ca73569cfeebc5b"
+		},
+		{
+			"ImportPath": "github.com/go-pg/pg/internal/parser",
+			"Comment": "v6.1.6",
+			"Rev": "60123ff7aaa535e1c26fba9b7ca73569cfeebc5b"
+		},
+		{
+			"ImportPath": "github.com/go-pg/pg/internal/pool",
+			"Comment": "v6.1.6",
+			"Rev": "60123ff7aaa535e1c26fba9b7ca73569cfeebc5b"
+		},
+		{
+			"ImportPath": "github.com/go-pg/pg/orm",
+			"Comment": "v6.1.6",
+			"Rev": "60123ff7aaa535e1c26fba9b7ca73569cfeebc5b"
+		},
+		{
+			"ImportPath": "github.com/go-pg/pg/types",
+			"Comment": "v6.1.6",
+			"Rev": "60123ff7aaa535e1c26fba9b7ca73569cfeebc5b"
+		},
+		{
 			"ImportPath": "github.com/gorilla/websocket",
 			"Comment": "v1.0.0-39-ge8f0f8a",
 			"Rev": "e8f0f8aaa98dfb6586cbdf2978d511e3199a960a"
@@ -45,36 +75,6 @@
 		{
 			"ImportPath": "golang.org/x/sys/unix",
 			"Rev": "d75a52659825e75fff6158388dddc6a5b04f9ba5"
-		},
-		{
-			"ImportPath": "gopkg.in/pg.v5",
-			"Comment": "v5.2.8",
-			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
-		},
-		{
-			"ImportPath": "gopkg.in/pg.v5/internal",
-			"Comment": "v5.2.8",
-			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
-		},
-		{
-			"ImportPath": "gopkg.in/pg.v5/internal/parser",
-			"Comment": "v5.2.8",
-			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
-		},
-		{
-			"ImportPath": "gopkg.in/pg.v5/internal/pool",
-			"Comment": "v5.2.8",
-			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
-		},
-		{
-			"ImportPath": "gopkg.in/pg.v5/orm",
-			"Comment": "v5.2.8",
-			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
-		},
-		{
-			"ImportPath": "gopkg.in/pg.v5/types",
-			"Comment": "v5.2.8",
-			"Rev": "faf12727feaaedd4622b85af0a9736a434d61a78"
 		}
 	]
 }

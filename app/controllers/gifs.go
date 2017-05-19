@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/tendresse/go-getting-started/app/config"
 	"github.com/tendresse/go-getting-started/app/dao"
 	"github.com/tendresse/go-getting-started/app/models"
 
@@ -17,7 +16,7 @@ type Gif struct {
 }
 
 func (c Gif) RandomGif() string {
-	gifs_dao := dao.Gif{DB:config.Global.DB}
+	gifs_dao := dao.Gif{}
 	gif := models.Gif{}
 	if err := gifs_dao.GetRandomGif(&gif); err != nil {
 		log.Error(err)
@@ -33,8 +32,8 @@ func (c Gif) RandomGif() string {
 
 //admin
 func (c Gif) GetGif(gif_id int) string {
-	gifs_dao := dao.Gif{DB:config.Global.DB}
-	gif := models.Gif{ID:gif_id}
+	gifs_dao := dao.Gif{}
+	gif := models.Gif{Id: gif_id}
 	if err := gifs_dao.GetFullGif(&gif); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"gif not found"}`
@@ -49,7 +48,7 @@ func (c Gif) GetGif(gif_id int) string {
 
 //admin
 func (c Gif) GetGifs() string {
-	gifs_dao := dao.Gif{DB:config.Global.DB}
+	gifs_dao := dao.Gif{}
 	gifs := []models.Gif{}
 	if err := gifs_dao.GetAllGifs(&gifs); err != nil {
 		log.Error(err)
@@ -73,7 +72,7 @@ func (c Gif) SearchGifsByTags(tags_json string) string {
 	if err := json.Unmarshal([]byte(tags_json), &tags); err != nil {
 		log.Error(err)
 	}
-	tags_dao := dao.Tag{DB:config.Global.DB}
+	tags_dao := dao.Tag{}
 	gifs     := []models.Gif{}
 	final_gifs := []models.Gif{}
 	first := true
@@ -94,7 +93,7 @@ func (c Gif) SearchGifsByTags(tags_json string) string {
 			CommonTags:
 			for j,_ := range gifs {
 				for k,_ := range tags.Tags[i].Gifs {
-					if gifs[j].ID == tags.Tags[i].Gifs[k].ID{
+					if gifs[j].Id == tags.Tags[i].Gifs[k].Id {
 						final_gifs = append(final_gifs, gifs[j])
 						continue CommonTags
 					}
@@ -113,7 +112,7 @@ func (c Gif) SearchGifsByTags(tags_json string) string {
 
 //admin
 func (c Gif) AddGif(gif_json string) string {
-	gifs_dao := dao.Gif{DB:config.Global.DB}
+	gifs_dao := dao.Gif{}
 
 	gif := models.Gif{}
 	if err := json.Unmarshal([]byte(gif_json), &gif); err != nil {
@@ -128,31 +127,31 @@ func (c Gif) AddGif(gif_json string) string {
 		log.Error(err)
 		return `{"success":false, "error":"error while creating gif"}`
 	}
-	tags_dao := dao.Tag{DB:config.Global.DB}
+	tags_dao := dao.Tag{}
 	for i, _ := range gif.Tags {
 		if err := tags_dao.GetOrCreateTag(&gif.Tags[i]); err != nil {
 			log.Error(err)
 			return `{"success":false, "error":"error while creating Tag"}`
 		}
-		if err := gifs_dao.AddTagToGif(&models.Tag{ID:gif.Tags[i].ID}, &gif); err != nil {
+		if err := gifs_dao.AddTagToGif(&models.Tag{Id: gif.Tags[i].Id}, &gif); err != nil {
 			log.Error(err)
 			return `{"success":false, "error":"error while creating Tag"}`
 		}
 	}
-	return strings.Join([]string{`{"success":true, "gif":`, string(gif.ID), "}"}, "")
+	return strings.Join([]string{`{"success":true, "gif":`, string(gif.Id), "}"}, "")
 }
 
 //admin
 func (c Gif) UpdateGif(gif_json string) string {
-	gifs_dao := dao.Gif{DB:config.Global.DB}
-	tags_dao := dao.Tag{DB:config.Global.DB}
+	gifs_dao := dao.Gif{}
+	tags_dao := dao.Tag{}
 
 	updated_gif := models.Gif{}
 	if err := json.Unmarshal([]byte(gif_json), &updated_gif); err != nil{
 		log.Error(err)
 		return `{"success":false, "error":"marshal achievement json error"}`
 	}
-	gif := models.Gif{ID:updated_gif.ID}
+	gif := models.Gif{Id: updated_gif.Id}
 	if err := gifs_dao.GetGif(&gif); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"achievement not found"}`
@@ -164,7 +163,7 @@ func (c Gif) UpdateGif(gif_json string) string {
 			log.Error(err)
 		}
 		for j,_ := range gif.Tags {
-			if updated_gif.Tags[i].ID == gif.Tags[j].ID {
+			if updated_gif.Tags[i].Id == gif.Tags[j].Id {
 				continue FetchTags
 			}
 		}
@@ -174,20 +173,20 @@ func (c Gif) UpdateGif(gif_json string) string {
 	CurrentTags:
 	for i,_ := range gif.Tags {
 		for j, _ := range updated_gif.Tags {
-			if updated_gif.Tags[j].ID == gif.Tags[i].ID {
+			if updated_gif.Tags[j].Id == gif.Tags[i].Id {
 				continue CurrentTags
 			}
 		}
 		// new tag so should be unlinked
 		gifs_dao.DeleteTagFromGif(&gif.Tags[i],&gif)
 	}
-	return strings.Join([]string{`{"success":true, "gif":` , string(gif.ID) , "}"} , "")
+	return strings.Join([]string{`{"success":true, "gif":` , string(gif.Id) , "}"} , "")
 }
 
 //admin
 func (c Gif) DeleteGif(gif_id int) string {
-	gifs_dao := dao.Gif{DB : config.Global.DB}
-	if err := gifs_dao.DeleteGif(&models.Gif{ID:gif_id}); err != nil {
+	gifs_dao := dao.Gif{}
+	if err := gifs_dao.DeleteGif(&models.Gif{Id: gif_id}); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error while deleting gif"}`
 	}

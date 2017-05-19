@@ -9,7 +9,7 @@ import (
 	"github.com/tendresse/go-getting-started/app/controllers"
 
 	log "github.com/Sirupsen/logrus"
-	"gopkg.in/pg.v5"
+	"github.com/go-pg/pg"
 	"github.com/graarh/golang-socketio"
 	"github.com/graarh/golang-socketio/transport"
 )
@@ -34,18 +34,20 @@ func main() {
 		current_user_id = 0
 		log.Println("Disconnected")
 	})
-	server.On("signup", func(c *gosocketio.Channel, username string, password string) string {
-		// return token
-		return controllers.User{}.Signup(username, password, &current_user_id, c)
+	type Credentials struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	server.On("signup", func(c *gosocketio.Channel, credentials Credentials) string {
+		return controllers.User{}.Signup(credentials.Username, credentials.Password, &current_user_id, c)
 	})
-	server.On("login", func(c *gosocketio.Channel, username string, password string) string {
-		// return token
-		return controllers.User{}.Login(username, password, &current_user_id, c)
+	server.On("login", func(c *gosocketio.Channel, credentials Credentials) string {
+		return controllers.User{}.Login(credentials.Username, credentials.Password, &current_user_id, c)
 	})
 	server.On("login with token", func(c *gosocketio.Channel, token string) string {
 		return controllers.User{}.LoginWithToken(token, &current_user_id, c)
 	})
-	server.On("ready", func(c *gosocketio.Channel, msg string) string {
+	server.On("ready", func(c *gosocketio.Channel) string {
 		if current_user_id == 0 {
 			return `{"success":false, "error":"you are not connected"}`
 		}
@@ -62,7 +64,7 @@ func main() {
 			log.Error(err)
 			return `{"success":false, "error":"user id cannot be converted"}`
 		}
-		log.Println("user_id ",user_id," profile was requested by user_id ",current_user_id)
+		log.Println("user_id :",user_id,"profile was requested by user_id :",current_user_id)
 		return controllers.User{}.GetProfile(user_id)
 	})
 	server.On("update device", func(c *gosocketio.Channel, device_token string) string {
@@ -72,9 +74,13 @@ func main() {
 		log.Println("user_id ",current_user_id," updated his device with device_token = ",device_token)
 		return controllers.User{}.UpdateDevice(device_token, &current_user_id)
 	})
-	server.On("send tendresse", func(c *gosocketio.Channel, friend_id string) string {
+	server.On("send tendresse", func(c *gosocketio.Channel, id_friend string) string {
 		if current_user_id == 0 {
 			return `{"success":false, "error":"you are not connected"}`
+		}
+		friend_id,err := strconv.Atoi(id_friend)
+		if err != nil {
+			return `{"success":false, "error":"error while parsing friend id"}`
 		}
 		return controllers.Tendresse{}.SendTendresse(friend_id, &current_user_id, c)
 	})
@@ -106,7 +112,7 @@ func main() {
 		}
 		return controllers.User{}.DeleteFriend(friend_id, &current_user_id)
 	})
-	server.On("random", func(c *gosocketio.Channel, ) string {
+	server.On("random", func(c *gosocketio.Channel) string {
 		return controllers.Gif{}.RandomGif()
 	})
 

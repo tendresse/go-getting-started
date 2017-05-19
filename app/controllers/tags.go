@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"strings"
 
-	"github.com/tendresse/go-getting-started/app/config"
 	"github.com/tendresse/go-getting-started/app/dao"
 	"github.com/tendresse/go-getting-started/app/models"
 
@@ -19,7 +18,7 @@ type Tag struct {
 // wrap with admin rights
 func (c Tag) GetTags() string {
 	// TODO : CHOOSE WHAT JSON TO RETURN
-	tags_dao := dao.Tag{DB:config.Global.DB}
+	tags_dao := dao.Tag{}
 	tags := []models.Tag{}
 	if err := tags_dao.GetAllTags(&tags); err != nil {
 		log.Error(err)
@@ -35,8 +34,8 @@ func (c Tag) GetTags() string {
 
 //admin
 func (c Tag) GetTag(tag_id int) string {
-	tags_dao := dao.Tag{DB:config.Global.DB}
-	tag := models.Tag{ID:tag_id}
+	tags_dao := dao.Tag{}
+	tag := models.Tag{Id: tag_id}
 	if err := tags_dao.GetFullTag(&tag); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"tag not found"}`
@@ -51,7 +50,7 @@ func (c Tag) GetTag(tag_id int) string {
 
 //admin
 func (c Tag) AddTag(tag_json string) string {
-	tags_dao := dao.Tag{DB:config.Global.DB}
+	tags_dao := dao.Tag{}
 	tag := models.Tag{}
 	if err := json.Unmarshal([]byte(tag_json), &tag); err != nil {
 		log.Error(err)
@@ -65,18 +64,18 @@ func (c Tag) AddTag(tag_json string) string {
 		log.Error(err)
 		return `{"success":false, "error":"error while creating Gif"}`
 	}
-	return strings.Join([]string{`{"success":true, "tag":`, string(tag.ID), "}"}, "")
+	return strings.Join([]string{`{"success":true, "tag":`, string(tag.Id), "}"}, "")
 }
 
 //admin
 func (c Tag) UpdateTag(tag_json string) string {
-	tags_dao := dao.Tag{DB:config.Global.DB}
+	tags_dao := dao.Tag{}
 	updated_tag := models.Tag{}
 	if err := json.Unmarshal([]byte(tag_json), &updated_tag); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"error while marshaling tag json"}`
 	}
-	tag := models.Tag{ID:updated_tag.ID}
+	tag := models.Tag{Id: updated_tag.Id}
 	if err := tags_dao.GetTag(&tag); err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"tag not found"}`
@@ -98,8 +97,8 @@ func (c Tag) UpdateTag(tag_json string) string {
 
 //admin
 func (c Tag) DeleteTag(tag_id int) string {
-	tags_dao := dao.Tag{DB:config.Global.DB}
-	tag := models.Tag{ID:tag_id}
+	tags_dao := dao.Tag{}
+	tag := models.Tag{Id: tag_id}
 	if err := tags_dao.DeleteTag(&tag).Error; err != nil {
 		log.Error(err)
 		return `{"success":false, "error":"tag already deleted"}`
